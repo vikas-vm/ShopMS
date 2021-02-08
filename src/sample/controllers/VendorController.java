@@ -31,9 +31,7 @@ public class VendorController extends sample.AbstractController implements Initi
                     "'"+email.getText()+"','"+contact.getText()+"')";
             int result = dbConnection.executeQuery(query);
             if (result>0){
-
                 vendor_warning.setText("");
-
             }
             else {
                 vendor_warning.setText("Internal Error");
@@ -43,7 +41,6 @@ public class VendorController extends sample.AbstractController implements Initi
             vendor_warning.setText("Please, fills all mandatory fields");
         }
     }
-
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -57,7 +54,7 @@ public class VendorController extends sample.AbstractController implements Initi
         insertVendorBtn.setOnAction((event)->{
 
             if(!title.getText().equals("") && !city.getText().equals("")){
-                String query = "insert into vendor(title, address, city, email, contact)" +
+                String query = "insert into vendors(title, address, city, email, contact)" +
                         " values('"+title.getText()+"','"+address.getText()+"','"+city.getText()+"'," +
                         "'"+email.getText()+"','"+contact.getText()+"')";
                 int return_result = dbConnection.executeQuery(query);
