@@ -1,4 +1,6 @@
-package sample;
+package sample.controllers;
+
+import sample.Main;
 
 public abstract class AbstractController {
 

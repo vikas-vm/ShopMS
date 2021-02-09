@@ -1,2 +1,4 @@
-package sample.controllers;public class AddItemPopup {
+package sample.controllers;
+
+public class AddItemPopup {
 }

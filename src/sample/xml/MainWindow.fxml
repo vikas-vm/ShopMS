@@ -862,7 +862,7 @@
                                         </rowConstraints>
                                         <HBox GridPane.rowIndex="0" GridPane.columnIndex="0">
                                             <VBox>
-                                                <Button text="+Add new order"/>
+                                                <Button fx:id="addVendorOrderBtn" text="+Add new order"/>
                                             </VBox>
                                         </HBox>
                                         <TableView fx:id="vendorOrdersTableView" GridPane.columnIndex="0" GridPane.rowIndex="1">

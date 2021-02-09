@@ -1,4 +1,4 @@
-package sample;
+package sample.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,6 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sample.DbConnection;
 import sample.models.VendorOrders;
 import sample.models.Vendors;
 import java.io.IOException;
@@ -23,8 +24,9 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 
-public class MainController extends sample.AbstractController implements Initializable {
+public class MainController extends AbstractController implements Initializable {
     public Button addVendorBtn;
+    public Button addVendorOrderBtn;
     public TextField sv_title;
     public TextField sv_contact;
     public TextField sv_email;
@@ -49,18 +51,53 @@ public class MainController extends sample.AbstractController implements Initial
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        addVendorOrderBtn.setDisable(true);
         showVendors();
         addVendorBtn.setOnAction((event)->{
             HashMap<String, Object> resultMap = showVendorPopupWindow();
             showVendors();
         });
+        addVendorOrderBtn.setOnAction((event)->{
+            HashMap<String, Object> resultMap = showAddVendorOrderPopupWindow();
+            resultMap.put("test",2);
+            Vendors p = vendorsTableView.getSelectionModel().getSelectedItem();
+            String query = "insert into vendor_orders(v_order_title, v_id) values('"+resultMap.get("orderTitle")+"','"+p.getId()+"')";
+            dbConnection.executeQuery(query);
+            showVendorOrders(p.getId());
+        });
+    }
+
+    private HashMap<String, Object> showAddVendorOrderPopupWindow() {
+        HashMap<String, Object> resultMap = new HashMap<String, Object>();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("../xml/AddNewOrderPopup.fxml"));
+        AddVendorOrderController addVendorOrderController = new AddVendorOrderController();
+        loader.setController(addVendorOrderController);
+        Parent layout;
+        try {
+            layout = loader.load();
+            Scene scene = new Scene(layout, 400, 280);
+            Stage popupStage = new Stage();
+            addVendorOrderController.setStage(popupStage);
+            if(this.main!=null) {
+                popupStage.initOwner(main.getPrimaryStage());
+            }
+            popupStage.initModality(Modality.WINDOW_MODAL);
+            popupStage.setTitle("Add Vendor | InventoryMS");
+            popupStage.resizableProperty().setValue(Boolean.FALSE);
+            popupStage.setScene(scene);
+            popupStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return addVendorOrderController.getResult();
     }
 
     private HashMap<String, Object> showVendorPopupWindow() {
         HashMap<String, Object> resultMap = new HashMap<String, Object>();
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("xml/VendorPopup.fxml"));
-        sample.VendorController popupController = new sample.VendorController();
+        loader.setLocation(getClass().getResource("../xml/VendorPopup.fxml"));
+        VendorController popupController = new VendorController();
         loader.setController(popupController);
         Parent layout;
         try {
@@ -94,7 +131,8 @@ public class MainController extends sample.AbstractController implements Initial
             rs = st.executeQuery(query);
             Vendors vendors;
             while(rs.next()) {
-                vendors = new Vendors(rs.getInt("Id"),rs.getString("Title"),rs.getString("Contact"),rs.getString("Email"),rs.getString("City"), rs.getString("Address"));
+                vendors = new Vendors(rs.getInt("Id"),rs.getString("Title"),rs.getString("Contact"),
+                        rs.getString("Email"),rs.getString("City"), rs.getString("Address"));
                 vendorsList.add(vendors);
             }
         } catch (Exception e) {
@@ -104,6 +142,7 @@ public class MainController extends sample.AbstractController implements Initial
     }
 
     public ObservableList<VendorOrders> getVendorOrdersList(int id){
+        addVendorOrderBtn.setDisable(false);
         ObservableList<VendorOrders> vendorOrdersList = FXCollections.observableArrayList();
         Connection connection = dbConnection.getConnection();
         String query = "SELECT * FROM vendor_orders where v_id = '"+id+"'";
