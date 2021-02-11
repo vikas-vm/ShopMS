@@ -2,9 +2,7 @@ package sample.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import sample.DbConnection;
@@ -13,7 +11,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class VendorController extends AbstractController implements Initializable {
+public class AddVendorPopup extends AbstractController implements Initializable {
     public TextField email;
     public TextField city;
     public TextArea address;
@@ -41,15 +39,28 @@ public class VendorController extends AbstractController implements Initializabl
                         "'"+email.getText()+"','"+contact.getText()+"')";
                 int return_result = dbConnection.executeQuery(query);
                 if (return_result>0){
-                    vendor_warning.setText("");
-                    closeStage();
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Vendor Added Successfully");
+                    alert.setHeaderText("Vendor Added Successfully");
+                    alert.showAndWait().ifPresent(rs -> {
+                        if (rs == ButtonType.OK) {
+                            closeStage();
+                        }
+                    });
                 }
                 else {
-                    vendor_warning.setText("Internal Error");
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Internal Error");
+                    alert.setHeaderText("Internal Error");
+                    alert.show();
                 }
             }
             else {
-                vendor_warning.setText("Please, fills all mandatory fields");
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Vendor failed to save");
+                alert.setHeaderText("Please fills all mandatory fields");
+                alert.show();
+                alert.setContentText("Recheck again title and city amt/qty fields");
             }
         });
     }

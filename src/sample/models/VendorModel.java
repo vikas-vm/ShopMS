@@ -1,15 +1,15 @@
 package sample.models;
 
-public class Vendors {
+public class VendorModel {
 
-    private int id;
-    private String title;
-    private String contact;
-    private String email;
-    private String city;
-    private String address;
+    private final int id;
+    private final String title;
+    private final String contact;
+    private final String email;
+    private final String city;
+    private final String address;
 
-    public Vendors(int Id, String Title, String Contact, String Email, String City, String Address){
+    public VendorModel(int Id, String Title, String Contact, String Email, String City, String Address){
         this.id = Id;
         this.title=Title;
         this.contact=Contact;

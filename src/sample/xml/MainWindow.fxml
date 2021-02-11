@@ -849,12 +849,12 @@
                                         <bottom/>
                                     </BorderPane>
                                 </HBox>
+
                                 <HBox GridPane.columnIndex="2" GridPane.rowIndex="0">
 
                                     <GridPane>
-
                                         <columnConstraints>
-                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="250.0"/>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="330.0"/>
                                         </columnConstraints>
                                         <rowConstraints>
                                             <RowConstraints minHeight="10.0"/>
@@ -868,7 +868,35 @@
                                         <TableView fx:id="vendorOrdersTableView" GridPane.columnIndex="0" GridPane.rowIndex="1">
                                             <columns>
                                                 <TableColumn fx:id="vo_id" text="ID" prefWidth="30"/>
-                                                <TableColumn fx:id="vo_title" text="Order" minWidth="100" prefWidth="218"/>
+                                                <TableColumn fx:id="vo_title" text="Order" minWidth="100" prefWidth="150"/>
+                                                <TableColumn fx:id="vo_status" text="Status" minWidth="100" prefWidth="150"/>
+                                            </columns>
+                                        </TableView>
+                                    </GridPane>
+                                </HBox>
+
+                                <HBox GridPane.columnIndex="3" GridPane.rowIndex="0">
+
+                                    <GridPane>
+                                        <columnConstraints>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="500.0"/>
+                                        </columnConstraints>
+                                        <rowConstraints>
+                                            <RowConstraints minHeight="10.0"/>
+                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                        </rowConstraints>
+                                        <HBox GridPane.rowIndex="0" GridPane.columnIndex="0">
+                                            <VBox>
+                                                <Button fx:id="addOrderItemBtn" text="+Add Item"/>
+                                            </VBox>
+                                        </HBox>
+                                        <TableView fx:id="vendorOrdersItemTableView" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                            <columns>
+                                                <TableColumn fx:id="item_id" text="ID" prefWidth="30"/>
+                                                <TableColumn fx:id="item_title" text="Item" minWidth="50" prefWidth="135"/>
+                                                <TableColumn fx:id="item_stock" text="Qty/Amt" minWidth="100" prefWidth="135"/>
+                                                <TableColumn fx:id="item_price" text="Price(per unit)" minWidth="100" prefWidth="100"/>
+                                                <TableColumn fx:id="item_mrp" text="MRP(per unit)" minWidth="100" prefWidth="100"/>
                                             </columns>
                                         </TableView>
                                     </GridPane>

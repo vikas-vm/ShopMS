@@ -18,7 +18,7 @@
 
 
                 <Label text="Order Title*:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                <TextField fx:id="order_title" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <TextField fx:id="order_title" GridPane.columnIndex="1" GridPane.rowIndex="0"  promptText="Enter order title"/>
 
 
                 <Button  fx:id="insertNewOrderBtn" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="1" prefWidth="250"/>

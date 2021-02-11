@@ -11,11 +11,10 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class  AddVendorOrderController extends AbstractController implements Initializable {
+public class AddVendorOrderPopup extends AbstractController implements Initializable {
     public TextField order_title;
     public Button insertNewOrderBtn;
     public Text warning;
-    DbConnection dbConnection = new DbConnection();
     private HashMap<String, Object> result = new HashMap<String, Object>();
     private Stage stage = null;
 
