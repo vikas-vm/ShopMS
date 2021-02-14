@@ -1,8 +1,14 @@
 package sample;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import sample.models.VendorModel;
+
+import java.sql.*;
 
 public class DbConnection {
 
@@ -27,6 +33,27 @@ public class DbConnection {
         catch (Exception e){
             e.printStackTrace();
             return null;
+        }
+    }
+    public String getTheme(){
+        Connection connection = getConnection();
+        String query = "SELECT * FROM appearance where id=1";
+        Statement st;
+        ResultSet rs;
+        String themeVar=null;
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(query);
+            if(rs.next()){
+                themeVar="/sample/themes/"+rs.getString("themeFile");
+            }
+            else {
+                themeVar="/sample/themes/light-theme.css";
+            }
+            return themeVar;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "/sample/themes/light-theme.css";
         }
     }
 }

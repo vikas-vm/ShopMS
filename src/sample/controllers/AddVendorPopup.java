@@ -1,6 +1,5 @@
 package sample.controllers;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
@@ -42,6 +41,7 @@ public class AddVendorPopup extends AbstractController implements Initializable 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Vendor Added Successfully");
                     alert.setHeaderText("Vendor Added Successfully");
+                    alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
                     alert.showAndWait().ifPresent(rs -> {
                         if (rs == ButtonType.OK) {
                             closeStage();
@@ -52,6 +52,8 @@ public class AddVendorPopup extends AbstractController implements Initializable 
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Internal Error");
                     alert.setHeaderText("Internal Error");
+                    alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+                    alert.getDialogPane().getStyleClass().add("myDialog");
                     alert.show();
                 }
             }
@@ -59,8 +61,10 @@ public class AddVendorPopup extends AbstractController implements Initializable 
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Vendor failed to save");
                 alert.setHeaderText("Please fills all mandatory fields");
-                alert.show();
+                alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+                alert.getDialogPane().getStyleClass().add("myDialog");
                 alert.setContentText("Recheck again title and city amt/qty fields");
+                alert.show();
             }
         });
     }

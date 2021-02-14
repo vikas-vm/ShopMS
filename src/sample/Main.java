@@ -10,6 +10,7 @@ import sample.controllers.MainController;
 public class Main extends Application {
 
     private Stage primaryStage;
+    DbConnection dbConnection = new DbConnection();
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -22,6 +23,7 @@ public class Main extends Application {
         loader.setController(mainController);
         Parent layout = loader.load();
         Scene scene = new Scene(layout , 700, 800);
+        scene.getRoot().getStylesheets().add(dbConnection.getTheme());
         primaryStage.setScene(scene);
         primaryStage.show();
         primaryStage.setTitle("InventoryMS");

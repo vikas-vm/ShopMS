@@ -4,16 +4,20 @@ public class ItemModel {
 
     private final int id;
     private final String title;
-    private final float stock;
-    private final float price;
-    private final float mrp;
+    private final String stock;
+    private final String price;
+    private final String mrp;
+    private final int itemType;
+    private final String cat;
 
-    public ItemModel(int Id, String title, float stock, float price, float mrp){
+    public ItemModel(int Id, String title, String stock, String price, String mrp, int itemType, String cat){
         this.id = Id;
         this.title=title;
         this.stock=stock;
         this.price=price;
         this.mrp=mrp;
+        this.itemType=itemType;
+        this.cat=cat;
     }
 
     public int getId() {
@@ -22,9 +26,20 @@ public class ItemModel {
     public String getTitle() {
         return title;
     }
-    public float getStock() { return stock; }
-    public float getPrice() { return price; }
-    public float getMrp() { return mrp; }
+    public String getStock() { return stock; }
+    public String getPrice() { return price; }
+    public String getMrp() { return mrp; }
+    public String getItemType(){
+        if(itemType==0){
+            return "By Quantity";
+        }
+        else {
+            return "By Unit";
+        }
+    }
+    public String getCategory(){
+        return cat;
+    }
 
 }
 

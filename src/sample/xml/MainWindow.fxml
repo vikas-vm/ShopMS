@@ -784,92 +784,83 @@
                                 <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="250.0"/>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="250.0"/>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="250.0"/>
                                 </columnConstraints>
                                 <rowConstraints>
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                                 </rowConstraints>
+
                                 <HBox GridPane.columnIndex="0" GridPane.rowIndex="0" minWidth="250">
                                     <GridPane>
-
                                         <columnConstraints>
-                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="250.0"/>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="350.0"/>
                                         </columnConstraints>
                                         <rowConstraints>
-                                            <RowConstraints minHeight="10.0"/>
-                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                            <RowConstraints minHeight="30.0" vgrow="ALWAYS" maxHeight="40"/>
+                                            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                            <RowConstraints minHeight="30.0" vgrow="ALWAYS" maxHeight="40"/>
                                         </rowConstraints>
-                                        <HBox GridPane.rowIndex="0" GridPane.columnIndex="0">
-                                            <VBox>
-                                                <Button text="+Add new vendor" fx:id="addVendorBtn"/>
-                                            </VBox>
+                                        <HBox GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER">
+                                                <Button prefHeight="40" minHeight="30" text="+Add new category" fx:id="addCategoryBtn"/>
                                         </HBox>
 
-                                        <TableView fx:id="vendorsTableView"  onMouseClicked="#getClicked" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                        <TableView fx:id="categoriesTableView" GridPane.columnIndex="0" GridPane.rowIndex="1">
                                             <columns>
-                                                <TableColumn fx:id="v_id" text="ID" prefWidth="30"/>
-                                                <TableColumn fx:id="v_title" text="Title" minWidth="100" prefWidth="218"/>
+                                                <TableColumn fx:id="cat_id" text="ID" prefWidth="30"/>
+                                                <TableColumn fx:id="cat_title" text="Category" minWidth="100" maxWidth="318"/>
                                             </columns>
                                         </TableView>
+                                        <HBox GridPane.rowIndex="2" GridPane.columnIndex="0" alignment="CENTER">
+                                            <Button prefHeight="40" minHeight="30" text="Update selected category" fx:id="updateCategoryBtn"/>
+                                        </HBox>
                                     </GridPane>
                                 </HBox>
-                                <HBox GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="500" minWidth="250">
 
-                                    <padding><Insets top="5" right="25" left="25"  /></padding>
-                                    <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                                AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                        <top>
+                                <HBox GridPane.columnIndex="1" GridPane.rowIndex="0" minWidth="250">
+                                    <GridPane>
+                                        <columnConstraints>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="300.0"/>
+                                        </columnConstraints>
+                                        <rowConstraints>
+                                            <RowConstraints minHeight="30.0" vgrow="ALWAYS" maxHeight="40"/>
+                                            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS"/>
+                                            <RowConstraints vgrow="ALWAYS" maxHeight="40" minHeight="30.0"/>
+                                        </rowConstraints>
+                                        <HBox GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER">
+                                                <Button maxHeight="40" minHeight="30" text="+Add new vendor" fx:id="addVendorBtn"/>
+                                        </HBox>
 
-                                        </top>
-                                        <center>
-                                            <GridPane xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="20" vgap="20">
-                                                <GridPane alignment="CENTER" hgap="20" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2">
-                                                    <padding><Insets top="35" bottom="20"/></padding>
-                                                    <Text text="Vendors Details"
-                                                          GridPane.columnIndex="0" GridPane.rowIndex="0"
-                                                          GridPane.columnSpan="2" scaleY="2" scaleX="2"/>
-                                                </GridPane>
-
-                                                <Label text="Title:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                                                <TextField fx:id="sv_title" GridPane.columnIndex="1" GridPane.rowIndex="1" editable="false"/>
-
-                                                <Label text="Contact:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                                                <TextField fx:id="sv_contact" GridPane.columnIndex="1" GridPane.rowIndex="2" editable="false"/>
-
-                                                <Label text="email:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                                                <TextField fx:id="sv_email" GridPane.columnIndex="1" GridPane.rowIndex="3" editable="false"/>
-
-                                                <Label text="Address:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-                                                <TextArea fx:id="sv_address" GridPane.columnIndex="1" GridPane.rowIndex="4" prefColumnCount="25"  editable="false"/>
-
-                                                <Label text="City:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-                                                <TextField fx:id="sv_city" GridPane.columnIndex="1" GridPane.rowIndex="5" editable="false"/>
-
-                                            </GridPane>
-                                        </center>
-                                        <bottom/>
-                                    </BorderPane>
+                                        <TableView fx:id="vendorsTableView" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                            <columns>
+                                                <TableColumn fx:id="v_id" text="ID" prefWidth="30"/>
+                                                <TableColumn fx:id="v_title" text="Title" minWidth="100" maxWidth="268"/>
+                                            </columns>
+                                        </TableView>
+                                        <HBox GridPane.rowIndex="2" prefHeight="30" GridPane.columnIndex="0" alignment="CENTER">
+                                            <Button prefHeight="40" text="Show selected vendor details" fx:id="showVendorBtn"/>
+                                        </HBox>
+                                    </GridPane>
                                 </HBox>
+
 
                                 <HBox GridPane.columnIndex="2" GridPane.rowIndex="0">
 
                                     <GridPane>
                                         <columnConstraints>
-                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="330.0"/>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="332.0"/>
                                         </columnConstraints>
                                         <rowConstraints>
-                                            <RowConstraints minHeight="10.0"/>
-                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                            <RowConstraints minHeight="30.0" vgrow="ALWAYS" maxHeight="40"/>
+                                            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                                         </rowConstraints>
                                         <HBox GridPane.rowIndex="0" GridPane.columnIndex="0">
-                                            <VBox>
-                                                <Button fx:id="addVendorOrderBtn" text="+Add new order"/>
-                                            </VBox>
+                                            <Button maxHeight="40" minHeight="30" fx:id="addVendorOrderBtn" text="+Add new order"/>
                                         </HBox>
                                         <TableView fx:id="vendorOrdersTableView" GridPane.columnIndex="0" GridPane.rowIndex="1">
                                             <columns>
                                                 <TableColumn fx:id="vo_id" text="ID" prefWidth="30"/>
-                                                <TableColumn fx:id="vo_title" text="Order" minWidth="100" prefWidth="150"/>
-                                                <TableColumn fx:id="vo_status" text="Status" minWidth="100" prefWidth="150"/>
+                                                <TableColumn fx:id="vo_title" text="Order" minWidth="100" maxWidth="150"/>
+                                                <TableColumn fx:id="vo_status" text="Status" minWidth="100" maxWidth="150"/>
                                             </columns>
                                         </TableView>
                                     </GridPane>
@@ -879,24 +870,24 @@
 
                                     <GridPane>
                                         <columnConstraints>
-                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="500.0"/>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="502.0"/>
                                         </columnConstraints>
                                         <rowConstraints>
-                                            <RowConstraints minHeight="10.0"/>
-                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                            <RowConstraints minHeight="30.0" vgrow="ALWAYS" maxHeight="40"/>
+                                            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                                         </rowConstraints>
                                         <HBox GridPane.rowIndex="0" GridPane.columnIndex="0">
-                                            <VBox>
-                                                <Button fx:id="addOrderItemBtn" text="+Add Item"/>
-                                            </VBox>
+                                            <Button maxHeight="40" minHeight="30" fx:id="addOrderItemBtn" text="+Add Item"/>
                                         </HBox>
                                         <TableView fx:id="vendorOrdersItemTableView" GridPane.columnIndex="0" GridPane.rowIndex="1">
                                             <columns>
                                                 <TableColumn fx:id="item_id" text="ID" prefWidth="30"/>
-                                                <TableColumn fx:id="item_title" text="Item" minWidth="50" prefWidth="135"/>
-                                                <TableColumn fx:id="item_stock" text="Qty/Amt" minWidth="100" prefWidth="135"/>
-                                                <TableColumn fx:id="item_price" text="Price(per unit)" minWidth="100" prefWidth="100"/>
-                                                <TableColumn fx:id="item_mrp" text="MRP(per unit)" minWidth="100" prefWidth="100"/>
+                                                <TableColumn fx:id="item_title" text="Item" minWidth="50" maxWidth="135"/>
+                                                <TableColumn fx:id="item_cat" text="Category" minWidth="50" maxWidth="135"/>
+                                                <TableColumn fx:id="itemType" text="Item Type" minWidth="50" maxWidth="135"/>
+                                                <TableColumn fx:id="item_stock" text="Qty/Amt" minWidth="100" maxWidth="135"/>
+                                                <TableColumn fx:id="item_price" text="Price(per unit)" minWidth="100" maxWidth="100"/>
+                                                <TableColumn fx:id="item_mrp" text="MRP(per unit)" minWidth="100" maxWidth="100"/>
                                             </columns>
                                         </TableView>
                                     </GridPane>

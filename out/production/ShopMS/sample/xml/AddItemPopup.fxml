@@ -3,7 +3,6 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
@@ -13,7 +12,7 @@
         <top>
             <GridPane alignment="CENTER" hgap="20">
                 <padding><Insets top="35" right="25" left="25"/></padding>
-                <Text text="Add Items" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" scaleY="2" scaleX="2"/>
+                <Label text="Add Items" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" scaleY="2" scaleX="2"/>
             </GridPane>
         </top>
         <center>
@@ -26,16 +25,13 @@
                 <TextField fx:id="title" GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="Item title"/>
 
                 <Label text="MRP:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                <TextField fx:id="mrp" GridPane.columnIndex="1" GridPane.rowIndex="2" promptText="unit price"/>
+                <TextField fx:id="mrp" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" promptText="unit price"/>
 
                 <Label text="Price:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                <TextField fx:id="price" GridPane.columnIndex="1" GridPane.rowIndex="3" promptText="unit price"/>
+                <TextField fx:id="price" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" promptText="unit price"/>
 
-                <Label text="AMT/QTY*:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-                <TextField fx:id="stock" GridPane.columnIndex="1" GridPane.rowIndex="4" promptText="10(for kg)/10.500(for kg)/10(for units)"/>
-
-                <Label text="Item Type*:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-                <ComboBox fx:id="itemType" GridPane.columnIndex="1" GridPane.rowIndex="5" prefWidth="350" promptText="Choose item type">
+                <Label text="Item Type*:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <ComboBox fx:id="itemType" GridPane.columnIndex="1" GridPane.rowIndex="4" prefWidth="350" promptText="Choose item type">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="By Quantity" />
@@ -44,8 +40,10 @@
                     </items>
                 </ComboBox>
 
-                <Button  fx:id="insertVendorBtn" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="6" prefWidth="350"/>
-                <Text fx:id="warning" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+                <Label text="AMT/QTY*:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                <TextField fx:id="stock" GridPane.columnIndex="1" GridPane.rowIndex="5" promptText="10(for kg)/10.500(for kg)/10(for units)"/>
+
+                <Button  fx:id="insertItemBtn" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="6" prefWidth="350"/>
             </GridPane>
         </center>
     </BorderPane>

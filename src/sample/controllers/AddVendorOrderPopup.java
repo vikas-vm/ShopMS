@@ -1,6 +1,7 @@
 package sample.controllers;
 
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -17,6 +18,7 @@ public class AddVendorOrderPopup extends AbstractController implements Initializ
     public Text warning;
     private HashMap<String, Object> result = new HashMap<String, Object>();
     private Stage stage = null;
+    DbConnection dbConnection = new DbConnection();
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -36,7 +38,12 @@ public class AddVendorOrderPopup extends AbstractController implements Initializ
                 closeStage();
             }
             else {
-                warning.setText("Please, fills all mandatory fields");
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Insertion failed!");
+                alert.setHeaderText("Please, fills all mandatory fields");
+                alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+                alert.getDialogPane().getStyleClass().add("myDialog");
+                alert.show();
             }
         });
 
