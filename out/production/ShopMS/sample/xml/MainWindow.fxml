@@ -801,7 +801,7 @@
                                             <RowConstraints minHeight="30.0" vgrow="ALWAYS" maxHeight="40"/>
                                         </rowConstraints>
                                         <HBox GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER">
-                                                <Button prefHeight="40" minHeight="30" text="+Add new category" fx:id="addCategoryBtn"/>
+                                                <Button prefHeight="40" prefWidth="350" minHeight="30" text="+Add new category" fx:id="addCategoryBtn"/>
                                         </HBox>
 
                                         <TableView fx:id="categoriesTableView" GridPane.columnIndex="0" GridPane.rowIndex="1">
@@ -811,7 +811,7 @@
                                             </columns>
                                         </TableView>
                                         <HBox GridPane.rowIndex="2" GridPane.columnIndex="0" alignment="CENTER">
-                                            <Button prefHeight="40" minHeight="30" text="Update selected category" fx:id="updateCategoryBtn"/>
+                                            <Button prefHeight="40" prefWidth="350" minHeight="30" text="Update selected category" fx:id="updateCategoryBtn"/>
                                         </HBox>
                                     </GridPane>
                                 </HBox>
@@ -827,7 +827,7 @@
                                             <RowConstraints vgrow="ALWAYS" maxHeight="40" minHeight="30.0"/>
                                         </rowConstraints>
                                         <HBox GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER">
-                                                <Button maxHeight="40" minHeight="30" text="+Add new vendor" fx:id="addVendorBtn"/>
+                                                <Button maxHeight="40" minHeight="30" prefWidth="300" text="+Add new vendor" fx:id="addVendorBtn"/>
                                         </HBox>
 
                                         <TableView fx:id="vendorsTableView" GridPane.columnIndex="0" GridPane.rowIndex="1">
@@ -837,7 +837,7 @@
                                             </columns>
                                         </TableView>
                                         <HBox GridPane.rowIndex="2" prefHeight="30" GridPane.columnIndex="0" alignment="CENTER">
-                                            <Button prefHeight="40" text="Show selected vendor details" fx:id="showVendorBtn"/>
+                                            <Button prefHeight="40" prefWidth="300" text="Show selected vendor details" fx:id="showVendorBtn"/>
                                         </HBox>
                                     </GridPane>
                                 </HBox>
@@ -853,8 +853,8 @@
                                             <RowConstraints minHeight="30.0" vgrow="ALWAYS" maxHeight="40"/>
                                             <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                                         </rowConstraints>
-                                        <HBox GridPane.rowIndex="0" GridPane.columnIndex="0">
-                                            <Button maxHeight="40" minHeight="30" fx:id="addVendorOrderBtn" text="+Add new order"/>
+                                        <HBox GridPane.rowIndex="0" alignment="CENTER" GridPane.columnIndex="0">
+                                            <Button maxHeight="40" minHeight="30" prefWidth="332" fx:id="addVendorOrderBtn" text="+Add new order"/>
                                         </HBox>
                                         <TableView fx:id="vendorOrdersTableView" GridPane.columnIndex="0" GridPane.rowIndex="1">
                                             <columns>
@@ -870,26 +870,31 @@
 
                                     <GridPane>
                                         <columnConstraints>
-                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="502.0"/>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="752.0"/>
                                         </columnConstraints>
                                         <rowConstraints>
                                             <RowConstraints minHeight="30.0" vgrow="ALWAYS" maxHeight="40"/>
-                                            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS"/>
+                                            <RowConstraints vgrow="ALWAYS" maxHeight="40" minHeight="30.0"/>
                                         </rowConstraints>
-                                        <HBox GridPane.rowIndex="0" GridPane.columnIndex="0">
-                                            <Button maxHeight="40" minHeight="30" fx:id="addOrderItemBtn" text="+Add Item"/>
+                                        <HBox GridPane.rowIndex="0" alignment="CENTER" GridPane.columnIndex="0">
+                                            <Button maxHeight="40" prefWidth="752" minHeight="30" fx:id="addOrderItemBtn" text="+Add Item"/>
                                         </HBox>
                                         <TableView fx:id="vendorOrdersItemTableView" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                                            <columns>
+                                            <columns >
                                                 <TableColumn fx:id="item_id" text="ID" prefWidth="30"/>
                                                 <TableColumn fx:id="item_title" text="Item" minWidth="50" maxWidth="135"/>
                                                 <TableColumn fx:id="item_cat" text="Category" minWidth="50" maxWidth="135"/>
                                                 <TableColumn fx:id="itemType" text="Item Type" minWidth="50" maxWidth="135"/>
-                                                <TableColumn fx:id="item_stock" text="Qty/Amt" minWidth="100" maxWidth="135"/>
-                                                <TableColumn fx:id="item_price" text="Price(per unit)" minWidth="100" maxWidth="100"/>
-                                                <TableColumn fx:id="item_mrp" text="MRP(per unit)" minWidth="100" maxWidth="100"/>
+                                                <TableColumn fx:id="item_stock" text="Stock" minWidth="100" maxWidth="135"/>
+                                                <TableColumn fx:id="item_initial" text="Initial" minWidth="100" prefWidth="135"/>
+                                                <TableColumn fx:id="item_price" text="Purchase price(per unit)" minWidth="100" prefWidth="175"/>
+                                                <TableColumn fx:id="item_mrp" text="selling price(per unit)" minWidth="100" prefWidth="150"/>
                                             </columns>
                                         </TableView>
+                                        <HBox GridPane.rowIndex="2" prefHeight="30" GridPane.columnIndex="0" alignment="BOTTOM_RIGHT">
+                                            <Button prefHeight="40" prefWidth="752" text="Move To Stock" fx:id="moveToStockBtn"/>
+                                        </HBox>
                                     </GridPane>
                                 </HBox>
                             </GridPane>

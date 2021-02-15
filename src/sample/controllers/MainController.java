@@ -19,13 +19,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 
 public class MainController extends AbstractController implements Initializable {
-    public Button addCategoryBtn, addVendorBtn, addVendorOrderBtn, addOrderItemBtn;
+    public Button addCategoryBtn, addVendorBtn, addVendorOrderBtn, addOrderItemBtn, moveToStockBtn;
 
     @FXML
     private TableView<CategoryModel> categoriesTableView;
@@ -53,7 +55,7 @@ public class MainController extends AbstractController implements Initializable 
     @FXML
     private TableColumn<ItemModel, Integer> item_id;
     @FXML
-    private TableColumn<ItemModel, String> item_title, item_stock, item_price, item_mrp, item_cat, itemType;
+    private TableColumn<ItemModel, String> item_title, item_stock, item_price, item_mrp, item_cat, itemType, item_initial;
 
     DbConnection dbConnection = new DbConnection();
 
@@ -64,8 +66,33 @@ public class MainController extends AbstractController implements Initializable 
     public void initialize(URL url, ResourceBundle rb) {
         addVendorOrderBtn.setDisable(true);
         addOrderItemBtn.setDisable(true);
+        moveToStockBtn.setDisable(true);
         showCategories();
         showVendors();
+        moveToStockBtn.setOnAction((event)->{
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Are you sure to move this order in stock?");
+            alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+
+            ButtonType yesButton = new ButtonType("Yes");
+            ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+            alert.getButtonTypes().setAll(yesButton, cancelButton);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.get() == yesButton)
+            {
+
+                VendorOrderModel p = vendorOrdersTableView.getSelectionModel().getSelectedItem();
+                moveToStock(p.getId());
+                showVendors();
+            }
+            else if(result.get() == cancelButton)
+            {
+
+            }
+        });
         addCategoryBtn.setOnAction((event)->{
             HashMap<String, Object> resultMap = showCategoryPopupWindow();
             showCategories();
@@ -78,16 +105,19 @@ public class MainController extends AbstractController implements Initializable 
             VendorModel p = vendorsTableView.getSelectionModel().getSelectedItem();
             showVendorOrders(p.getId());
             addOrderItemBtn.setDisable(true);
+            moveToStockBtn.setDisable(true);
             vendorOrdersItemTableView.setItems(null);
         });
         vendorOrdersTableView.setOnMouseClicked(mouseEvent -> {
             VendorOrderModel p = vendorOrdersTableView.getSelectionModel().getSelectedItem();
-            showVendorOrderItems(p.getId());
+            showVendorOrderItems(p.getId(), p.getInStock());
             addOrderItemBtn.setDisable(!p.getInStock().equals("In Order"));
         });
         vendorOrdersItemTableView.setOnMouseClicked(mouseEvent -> {
             ItemModel p = vendorOrdersItemTableView.getSelectionModel().getSelectedItem();
             showUpdateItemPopup(p.getId());
+            VendorOrderModel pi = vendorOrdersTableView.getSelectionModel().getSelectedItem();
+            showVendorOrderItems(pi.getId(), pi.getInStock());
         });
         addVendorOrderBtn.setOnAction((event)->{
             HashMap<String, Object> resultMap = showAddVendorOrderPopupWindow();
@@ -102,8 +132,24 @@ public class MainController extends AbstractController implements Initializable 
         addOrderItemBtn.setOnAction((event)->{
             HashMap<String, Object> resultMap = showAddItemPopup();
             VendorOrderModel p = vendorOrdersTableView.getSelectionModel().getSelectedItem();
-            showVendorOrderItems(p.getId());
+            showVendorOrderItems(p.getId(), p.getInStock());
         });
+    }
+
+    public boolean hasItems(int id) throws SQLException {
+        Connection connection = dbConnection.getConnection();
+
+        String query = "SELECT * FROM items i JOIN categories c on c.id = i.cat_id where i.vo_id = '"+id+"'";
+        Statement st;
+        ResultSet rs;
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(query);
+            return rs.next();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return false;
+        }
     }
 
     private HashMap<String, Object> showAddVendorOrderPopupWindow() {
@@ -335,7 +381,8 @@ public class MainController extends AbstractController implements Initializable 
                         rs.getString("price"),
                         rs.getString("mrp"),
                         rs.getInt("itemType"),
-                        rs.getString("c.title")
+                        rs.getString("c.title"),
+                        rs.getString("initial")
                         );
                 vendorOrdersItemList.add(itemModel);
             }
@@ -367,7 +414,7 @@ public class MainController extends AbstractController implements Initializable 
         vendorOrdersTableView.setItems(list);
     }
 
-    public void showVendorOrderItems(int id) {
+    public void showVendorOrderItems(int id, String stockStatus) {
         ObservableList<ItemModel> list = getVendorOrdersItemList(id);
         item_id.setCellValueFactory(new PropertyValueFactory<>("id"));
         item_title.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -376,7 +423,53 @@ public class MainController extends AbstractController implements Initializable 
         item_stock.setCellValueFactory(new PropertyValueFactory<>("stock"));
         item_price.setCellValueFactory(new PropertyValueFactory<>("price"));
         item_mrp.setCellValueFactory(new PropertyValueFactory<>("mrp"));
+        item_initial.setCellValueFactory(new PropertyValueFactory<>("initial"));
         vendorOrdersItemTableView.setItems(list);
+
+        moveToStockBtn.setDisable(true);
+        try {
+            if(hasItems(id) && stockStatus.equals("In Order")){
+                moveToStockBtn.setDisable(false);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+    public void moveToStock(int id){
+        String query = "UPDATE items set items.initial=items.stock where vo_id='"+id+"'";
+        String query1 = "UPDATE vendor_orders set inStock='1' where id='"+id+"'";
+        try {
+            int return_result = dbConnection.executeQuery(query);
+            int return_result1 = dbConnection.executeQuery(query1);
+            if (return_result>0 && return_result1>0){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("information");
+                alert.setHeaderText("Order Successfully Moved to stock");
+                alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+                alert.showAndWait().ifPresent(rs -> {
+                    if (rs == ButtonType.OK) {
+                        addOrderItemBtn.setDisable(true);
+                        moveToStockBtn.setDisable(true);
+                        VendorOrderModel p = vendorOrdersTableView.getSelectionModel().getSelectedItem();
+                        p.setInStock();
+                    }
+                });
+            }
+            else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Internal Error");
+                alert.setHeaderText("Internal Error");
+                alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+                alert.show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Internal Error");
+            alert.setHeaderText("Internal Error");
+            alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+            alert.show();
+        }
     }
 
 }

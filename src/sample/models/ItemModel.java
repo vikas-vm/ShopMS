@@ -9,8 +9,9 @@ public class ItemModel {
     private final String mrp;
     private final int itemType;
     private final String cat;
+    private final String initial;
 
-    public ItemModel(int Id, String title, String stock, String price, String mrp, int itemType, String cat){
+    public ItemModel(int Id, String title, String stock, String price, String mrp, int itemType, String cat, String initial){
         this.id = Id;
         this.title=title;
         this.stock=stock;
@@ -18,6 +19,7 @@ public class ItemModel {
         this.mrp=mrp;
         this.itemType=itemType;
         this.cat=cat;
+        this.initial=initial;
     }
 
     public int getId() {
@@ -27,6 +29,13 @@ public class ItemModel {
         return title;
     }
     public String getStock() { return stock; }
+    public String getInitial() {
+        if(initial.equals("")){
+            return "null";
+        }else {
+            return initial;
+        }
+    }
     public String getPrice() { return price; }
     public String getMrp() { return mrp; }
     public String getItemType(){

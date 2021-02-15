@@ -20,11 +20,11 @@
                 <Label text="Category*:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
                 <TextField fx:id="cat" GridPane.columnIndex="1" GridPane.rowIndex="2" promptText="Category" editable="false"/>
 
-                <Label text="MRP:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                <TextField fx:id="mrp" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" promptText="unit price" editable="false"/>
+                <Label text="Retail Price:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <TextField fx:id="mrp" text="0" GridPane.columnIndex="1" GridPane.rowIndex="4" promptText="unit price" editable="false"/>
 
-                <Label text="Price:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-                <TextField fx:id="price" text="0" GridPane.columnIndex="1" GridPane.rowIndex="4" promptText="unit price" editable="false"/>
+                <Label text="Purchase Price:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <TextField fx:id="price" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" promptText="unit price" editable="false"/>
 
                 <Label text="AMT/QTY*:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
                 <TextField fx:id="stock" GridPane.columnIndex="1" GridPane.rowIndex="5" promptText="10(for kg)/10.500(for kg)/10(for units)" editable="false"/>

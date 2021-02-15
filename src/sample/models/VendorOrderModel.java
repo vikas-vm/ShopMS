@@ -4,7 +4,7 @@ public class VendorOrderModel {
 
     private final int id;
     private final String title;
-    private final int inStock;
+    private int inStock;
 
     public VendorOrderModel(int Id, String Title, int inStock){
         this.id = Id;
@@ -25,6 +25,9 @@ public class VendorOrderModel {
         else {
             return "In Stock";
         }
+    }
+    public void setInStock(){
+        this.inStock=0;
     }
 
 }

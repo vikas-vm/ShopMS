@@ -46,7 +46,10 @@ public class ItemPopup extends AbstractController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setForm();
         updateItemBtn.setOnAction((event)->{
-//            insertItem();
+            updateItem();
+        });
+        deleteBtn.setOnAction((event)->{
+            deleteItem();
         });
         mrp.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -108,9 +111,16 @@ public class ItemPopup extends AbstractController implements Initializable {
                     deleteBtn.setDisable(true);
                 }
 
-                ItemModel itemModel = new ItemModel(rs.getInt("i.id"), rs.getString("i.title"),
-                        rs.getString("stock"), rs.getString("price"), rs.getString("mrp"),
-                        rs.getInt("itemType"), rs.getString("c.title"));
+                ItemModel itemModel = new ItemModel(
+                        rs.getInt("i.id"),
+                        rs.getString("i.title"),
+                        rs.getString("stock"),
+                        rs.getString("price"),
+                        rs.getString("mrp"),
+                        rs.getInt("itemType"),
+                        rs.getString("c.title"),
+                        rs.getString("initial")
+                );
                 title.setText(itemModel.getTitle());
                 cat.setText(itemModel.getCategory());
                 mrp.setText(String.valueOf(itemModel.getMrp()));
@@ -141,80 +151,78 @@ public class ItemPopup extends AbstractController implements Initializable {
             }
         });
     }
-    public void insertItem(){
+    public void updateItem(){
 
-//        if(cat.getValue()!=null && !title.getText().equals("") && !stock.getText().equals("")){
-//            int varItemType = 0;
-//            String varStock;
-//            if(itemType.getValue().equals("By Unit")){
-//                varItemType = 1;
-//                varStock = String.valueOf(Integer.parseInt(stock.getText()));
-//            }else {
-//                varStock = String.valueOf(Float.parseFloat(stock.getText()));
-//            }
-//            int cat_id = 0;
-//            String query = "SELECT * FROM categories where title = '"+cat.getValue()+"'";
-//            Statement st;
-//            ResultSet resultSet;
-//            try {
-//                st = connection.createStatement();
-//                resultSet = st.executeQuery(query);
-//                while(resultSet.next()) {
-//                    cat_id = resultSet.getInt("id");
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                Alert alert = new Alert(Alert.AlertType.WARNING);
-//                alert.setTitle("Internal Error");
-//                alert.setHeaderText("Internal Error");
-//                alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
-//                alert.show();
-//            }
-//            try {
-//                String query1 = "insert into items(cat_id, vo_id, title, mrp, price, stock, itemType)" +
-//                        " values('"+cat_id+"','"+orderId+"','"+title.getText()+"'," +
-//                        "'"+mrp.getText()+"','"+price.getText()+"', '"+varStock+"','"+varItemType+"')";
-//                int return_result = dbConnection.executeQuery(query1);
-//                if (return_result>0){
-//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                    alert.setTitle("Item Added Successfully");
-//                    alert.setHeaderText("Item Added Successfully");
-//                    alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
-//                    alert.showAndWait().ifPresent(rs -> {
-//                        if (rs == ButtonType.OK) {
-//                            cat.getSelectionModel().clearSelection();
-//                            title.setText("");
-//                            mrp.setText("0");
-//                            price.setText("0");
-//                            stock.setText("");
-//                            itemType.getSelectionModel().selectFirst();
-//                        }
-//                    });
-//                }
-//                else {
-//                    Alert alert = new Alert(Alert.AlertType.WARNING);
-//                    alert.setTitle("Internal Error");
-//                    alert.setHeaderText("Internal Error");
-//                    alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
-//                    alert.show();
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                Alert alert = new Alert(Alert.AlertType.WARNING);
-//                alert.setTitle("Internal Error");
-//                alert.setHeaderText("Internal Error");
-//                alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
-//                alert.show();
-//            }
-//
-//        }else {
-//            Alert alert = new Alert(Alert.AlertType.WARNING);
-//            alert.setTitle("item failed to save");
-//            alert.setHeaderText("Please fills all mandatory fields");
-//            alert.setContentText("Recheck again category, title and amt/qty fields");
-//            alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
-//            alert.show();
-//        }
+        if(!price.getText().equals("") && !mrp.getText().equals("") && !stock.getText().equals("")){
+            String query = "UPDATE items set mrp='"+mrp.getText()+"', price='"+price.getText()+"', stock='"+stock.getText()+"' where id='"+itemId+"'";
+            try {
+                int return_result = dbConnection.executeQuery(query);
+                if (return_result>0){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Item Updated Successfully");
+                    alert.setHeaderText("Item Updated Successfully");
+                    alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+                    alert.showAndWait().ifPresent(rs -> {
+                        if (rs == ButtonType.OK) {
+                            closeStage();
+                        }
+                    });
+                }
+                else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Internal Error");
+                    alert.setHeaderText("Internal Error");
+                    alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+                    alert.show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Internal Error");
+                alert.setHeaderText("Internal Error");
+                alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+                alert.show();
+            }
+
+        }else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("item failed to update");
+            alert.setHeaderText("Please fills all mandatory fields");
+            alert.setContentText("Recheck again retail, purchase price and stock fields");
+            alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+            alert.show();
+        }
+    }
+    public void deleteItem(){
+        String query = "DELETE FROM items where id='"+itemId+"'";
+        try {
+            int return_result = dbConnection.executeQuery(query);
+            if (return_result>0){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information | InventoryMS");
+                alert.setHeaderText("Item deleted Successfully");
+                alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+                alert.showAndWait().ifPresent(rs -> {
+                    if (rs == ButtonType.OK) {
+                        closeStage();
+                    }
+                });
+            }
+            else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Warning | InventoryMS");
+                alert.setHeaderText("Internal Error");
+                alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+                alert.show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning | InventoryMS");
+            alert.setHeaderText("Internal Error");
+            alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+            alert.show();
+        }
     }
     private void closeStage() {
         if(stage!=null) {
