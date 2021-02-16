@@ -1,6 +1,8 @@
 package sample.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -8,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.DbConnection;
@@ -27,14 +30,15 @@ import java.util.ResourceBundle;
 
 
 public class MainController extends AbstractController implements Initializable {
-    public Button addCategoryBtn, addVendorBtn, addVendorOrderBtn, addOrderItemBtn, moveToStockBtn;
+    public Button addCategoryBtn, addVendorBtn, addVendorOrderBtn, addOrderItemBtn, moveToStockBtn, clearSearchBtn;
+    public TextField searchField;
 
     @FXML
-    private TableView<CategoryModel> categoriesTableView;
+    private TableView<CategoryModel> categoriesTableView, shopCategoriesTableView;
     @FXML
-    private TableColumn<CategoryModel, Integer> cat_id;
+    private TableColumn<CategoryModel, Integer> cat_id, shop_cat_id;
     @FXML
-    private TableColumn<CategoryModel, String> cat_title;
+    private TableColumn<CategoryModel, String> cat_title, shop_cat_title;
 
     @FXML
     private TableView<VendorModel> vendorsTableView;
@@ -56,14 +60,41 @@ public class MainController extends AbstractController implements Initializable 
     private TableColumn<ItemModel, Integer> item_id;
     @FXML
     private TableColumn<ItemModel, String> item_title, item_stock, item_price, item_mrp, item_cat, itemType, item_initial;
-
+    public GridPane shopItemsGrid;
     DbConnection dbConnection = new DbConnection();
 
-    public MainController() {
-    }
+    int x;
+    int y;
+    private void addButton(int id, String btnText) {
+        final Button temp = new Button(btnText);
+        temp.setId("" + id);
+        temp.getStyleClass().add("item-special-button");
+        temp.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                getItem(Integer.parseInt(temp.getId()));
+            }
+        });
+        shopItemsGrid.add(temp, x, y);
+        if(x==7){
+            x=0;
+            y++;
+        }
+        else {
+            x++;
+        }
 
+    }
+    public void getItem(int id){
+        System.out.println(id);
+    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+//        while(i<300){
+//            addButton();
+//        }
+        setItemsToGrid(0,"");
         addVendorOrderBtn.setDisable(true);
         addOrderItemBtn.setDisable(true);
         moveToStockBtn.setDisable(true);
@@ -93,9 +124,16 @@ public class MainController extends AbstractController implements Initializable 
 
             }
         });
+
         addCategoryBtn.setOnAction((event)->{
             HashMap<String, Object> resultMap = showCategoryPopupWindow();
             showCategories();
+        });
+        clearSearchBtn.setOnAction((event)->{
+            searchField.setText("");
+        });
+        searchField.textProperty().addListener((event)->{
+            setItemsToGrid(0,searchField.getText());
         });
         addVendorBtn.setOnAction((event)->{
             HashMap<String, Object> resultMap = showVendorPopupWindow();
@@ -107,6 +145,10 @@ public class MainController extends AbstractController implements Initializable 
             addOrderItemBtn.setDisable(true);
             moveToStockBtn.setDisable(true);
             vendorOrdersItemTableView.setItems(null);
+        });
+        shopCategoriesTableView.setOnMouseClicked(mouseEvent -> {
+            CategoryModel p = shopCategoriesTableView.getSelectionModel().getSelectedItem();
+            setItemsToGrid(p.getId(), "");
         });
         vendorOrdersTableView.setOnMouseClicked(mouseEvent -> {
             VendorOrderModel p = vendorOrdersTableView.getSelectionModel().getSelectedItem();
@@ -134,6 +176,45 @@ public class MainController extends AbstractController implements Initializable 
             VendorOrderModel p = vendorOrdersTableView.getSelectionModel().getSelectedItem();
             showVendorOrderItems(p.getId(), p.getInStock());
         });
+    }
+
+    public void setItemsToGrid(int id, String search){
+        x=0;
+        y=0;
+        shopItemsGrid.getChildren().clear();
+        Connection connection = dbConnection.getConnection();
+        String query;
+        if(search.equals("")){
+            if(id>0){
+                query = "SELECT * FROM items i JOIN categories c on c.id = i.cat_id JOIN vendor_orders vo on (i.vo_id=vo.id and vo.inStock='1' and i.stock>0) where i.cat_id = '"+id+"'";
+            }
+            else {
+                query = "SELECT * FROM items i JOIN categories c on c.id = i.cat_id JOIN vendor_orders vo on (i.vo_id=vo.id and vo.inStock='1' and i.stock>0)";
+            }
+        }
+        else {
+            query="SELECT * FROM items i JOIN categories c on c.id = i.cat_id JOIN vendor_orders vo on (i.vo_id=vo.id and vo.inStock='1' and i.stock>0) where" +
+                    " i.title LIKE '%"+search+"%' or c.title LIKE '%"+search+"%' ";
+        }
+        Statement st;
+        ResultSet rs;
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(query);
+            String itemType;
+            while (rs.next()){
+                if(rs.getInt("itemType")==0){
+                    itemType="/kg";
+                }else {
+                    itemType="/unit";
+                }
+                addButton(rs.getInt("i.id"), rs.getString("i.title")+"\n("+
+                        rs.getString("c.title")+")"+"\n₹ "+
+                        rs.getString("i.mrp")+itemType);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     public boolean hasItems(int id) throws SQLException {
@@ -179,6 +260,7 @@ public class MainController extends AbstractController implements Initializable 
         }
         return addVendorOrderController.getResult();
     }
+
     private HashMap<String, Object> showAddItemPopup() {
         HashMap<String, Object> resultMap = new HashMap<String, Object>();
 
@@ -316,17 +398,20 @@ public class MainController extends AbstractController implements Initializable 
         return vendorsList;
     }
 
-    public ObservableList<CategoryModel> getCategoriesList(){
+    public ObservableList<CategoryModel> getCategoriesList(boolean state){
         ObservableList<CategoryModel> categoryModels = FXCollections.observableArrayList();
         Connection connection = dbConnection.getConnection();
         String query = "SELECT * FROM categories";
         Statement st;
         ResultSet rs;
-
+        CategoryModel categoryModel;
+        if(state){
+            categoryModel = new CategoryModel(0,"All");
+            categoryModels.add(categoryModel);
+        }
         try {
             st = connection.createStatement();
             rs = st.executeQuery(query);
-            CategoryModel categoryModel;
             while(rs.next()) {
                 categoryModel = new CategoryModel(rs.getInt("id"),rs.getString("title"));
                 categoryModels.add(categoryModel);
@@ -393,10 +478,16 @@ public class MainController extends AbstractController implements Initializable 
     }
 
     public void showCategories() {
-        ObservableList<CategoryModel> list = getCategoriesList();
+        ObservableList<CategoryModel> list = getCategoriesList(false);
         cat_id.setCellValueFactory(new PropertyValueFactory<>("id"));
         cat_title.setCellValueFactory(new PropertyValueFactory<>("category"));
         categoriesTableView.setItems(list);
+
+
+        ObservableList<CategoryModel> list1 = getCategoriesList(true);
+        shop_cat_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        shop_cat_title.setCellValueFactory(new PropertyValueFactory<>("category"));
+        shopCategoriesTableView.setItems(list1);
     }
 
     public void showVendors() {
@@ -439,8 +530,8 @@ public class MainController extends AbstractController implements Initializable 
         String query = "UPDATE items set items.initial=items.stock where vo_id='"+id+"'";
         String query1 = "UPDATE vendor_orders set inStock='1' where id='"+id+"'";
         try {
-            int return_result = dbConnection.executeQuery(query);
             int return_result1 = dbConnection.executeQuery(query1);
+            int return_result = dbConnection.executeQuery(query);
             if (return_result>0 && return_result1>0){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("information");
@@ -450,8 +541,8 @@ public class MainController extends AbstractController implements Initializable 
                     if (rs == ButtonType.OK) {
                         addOrderItemBtn.setDisable(true);
                         moveToStockBtn.setDisable(true);
-                        VendorOrderModel p = vendorOrdersTableView.getSelectionModel().getSelectedItem();
-                        p.setInStock();
+                        VendorModel p = vendorsTableView.getSelectionModel().getSelectedItem();
+                        showVendorOrders(p.getId());
                     }
                 });
             }

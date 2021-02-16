@@ -1,5 +1,7 @@
 package sample.models;
 
+import java.util.Objects;
+
 public class ItemModel {
 
     private final int id;
@@ -29,13 +31,7 @@ public class ItemModel {
         return title;
     }
     public String getStock() { return stock; }
-    public String getInitial() {
-        if(initial.equals("")){
-            return "null";
-        }else {
-            return initial;
-        }
-    }
+    public String getInitial() { return Objects.requireNonNullElse(initial, "null"); }
     public String getPrice() { return price; }
     public String getMrp() { return mrp; }
     public String getItemType(){

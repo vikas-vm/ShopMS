@@ -15,7 +15,7 @@
     -fx-background-color: -fx-text-box-border, derive(-fx-base, 15%) ;
     -fx-background-insets: 0, 0 0 1 0 ;
     -fx-background-radius: 0 ;
-    -fx-prompt-text-fill: lightgray;
+    -fx-prompt-text-fill: gray;
 }
 .text-field:focused {
     -fx-background-color: -fx-focus-color, -fx-background ;
@@ -26,7 +26,7 @@
     -fx-control-inner-background: derive(-fx-base, 15%) ;
     -fx-background-insets: 0, 0 0 1 0 ;
     -fx-background-radius: 0 ;
-    -fx-prompt-text-fill: lightgray;
+    -fx-prompt-text-fill: gray;
 }
 .text-area:focused {
     -fx-control-inner-background: -fx-background ;
@@ -36,7 +36,7 @@
 
 .combo-box {
     -fx-background-color: derive(-fx-base, 15%);
-    -fx-prompt-text-fill: lightgray;
+    -fx-prompt-text-fill: gray;
 }
 
 .titulo{
@@ -50,12 +50,21 @@
 
 .button:hover{
     -fx-text-fill: white;
+    -fx-background-color: derive(-fx-base, 25%);
+    -fx-border-color: #009687;
+}
+.item-special-button {
+    -fx-pref-height: 150px;
+    -fx-pref-width: 150px;
 }
 
 .separator *.line {
     -fx-background-color: #3C3C3C;
     -fx-border-style: solid;
     -fx-border-width: 1px;
+}
+.list-view{
+    -fx-background-color: derive(-fx-base,15%);
 }
 
 .scroll-bar{
