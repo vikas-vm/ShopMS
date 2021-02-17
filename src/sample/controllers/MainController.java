@@ -14,10 +14,8 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.DbConnection;
-import sample.models.CategoryModel;
-import sample.models.ItemModel;
-import sample.models.VendorOrderModel;
-import sample.models.VendorModel;
+import sample.models.*;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -32,6 +30,7 @@ import java.util.ResourceBundle;
 public class MainController extends AbstractController implements Initializable {
     public Button addCategoryBtn, addVendorBtn, addVendorOrderBtn, addOrderItemBtn, moveToStockBtn, clearSearchBtn;
     public TextField searchField;
+    public MenuItem themeBtn;
 
     @FXML
     private TableView<CategoryModel> categoriesTableView, shopCategoriesTableView;
@@ -60,6 +59,12 @@ public class MainController extends AbstractController implements Initializable 
     private TableColumn<ItemModel, Integer> item_id;
     @FXML
     private TableColumn<ItemModel, String> item_title, item_stock, item_price, item_mrp, item_cat, itemType, item_initial;
+    @FXML
+    private TableView<CartsModel> ordersItemTableView;
+    @FXML
+    private TableColumn<CartsModel, Integer> order_item_id;
+    @FXML
+    private TableColumn<CartsModel, String> order_item_title, order_item_price, order_item_qty, order_item_amount;
     public GridPane shopItemsGrid;
     DbConnection dbConnection = new DbConnection();
 
@@ -72,7 +77,7 @@ public class MainController extends AbstractController implements Initializable 
         temp.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                getItem(Integer.parseInt(temp.getId()));
+                AddToCart(Integer.parseInt(temp.getId()));
             }
         });
         shopItemsGrid.add(temp, x, y);
@@ -85,21 +90,44 @@ public class MainController extends AbstractController implements Initializable 
         }
 
     }
-    public void getItem(int id){
-        System.out.println(id);
+
+    public void AddToCart(int id){
+        int orderId=GetOrCreateOrder();
+        Connection connection = dbConnection.getConnection();
+        String query = "SELECT * FROM order_items where item_id='"+id+"'and order_id='"+orderId+"'";
+        Statement st;
+        ResultSet rs;
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(query);
+            if(rs.next()){
+                showUpdateCartPopup(id, orderId);
+            }
+            else {
+                showAddToCartPopup(id, orderId);
+                showCartItems();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
-//        while(i<300){
-//            addButton();
-//        }
         setItemsToGrid(0,"");
+        showCategories();
+        showCartItems();
         addVendorOrderBtn.setDisable(true);
         addOrderItemBtn.setDisable(true);
         moveToStockBtn.setDisable(true);
-        showCategories();
         showVendors();
+        themeBtn.setOnAction((event)->{
+            showThemesListPopup();
+            Stage stage2 = (Stage) moveToStockBtn.getScene().getWindow();
+            Parent root = stage2.getScene().getRoot();
+            root.getStylesheets().clear();
+            root.getStylesheets().add(dbConnection.getTheme());
+        });
         moveToStockBtn.setOnAction((event)->{
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning");
@@ -114,14 +142,9 @@ public class MainController extends AbstractController implements Initializable 
             Optional<ButtonType> result = alert.showAndWait();
             if(result.get() == yesButton)
             {
-
                 VendorOrderModel p = vendorOrdersTableView.getSelectionModel().getSelectedItem();
                 moveToStock(p.getId());
                 showVendors();
-            }
-            else if(result.get() == cancelButton)
-            {
-
             }
         });
 
@@ -139,6 +162,18 @@ public class MainController extends AbstractController implements Initializable 
             HashMap<String, Object> resultMap = showVendorPopupWindow();
             showVendors();
         });
+        ordersItemTableView.setOnMouseClicked(mouseEvent -> {
+            CartsModel p = ordersItemTableView.getSelectionModel().getSelectedItem();
+            if (p!=null) {
+                showUpdateCartPopup(p.getItem_id(), GetOrCreateOrder());
+                showCartItems();
+            }
+        });
+        shopCategoriesTableView.setOnMouseClicked(mouseEvent -> {
+            CategoryModel p = shopCategoriesTableView.getSelectionModel().getSelectedItem();
+            if(p != null) setItemsToGrid(p.getId(), "");
+
+        });
         vendorsTableView.setOnMouseClicked(mouseEvent -> {
             VendorModel p = vendorsTableView.getSelectionModel().getSelectedItem();
             showVendorOrders(p.getId());
@@ -146,25 +181,23 @@ public class MainController extends AbstractController implements Initializable 
             moveToStockBtn.setDisable(true);
             vendorOrdersItemTableView.setItems(null);
         });
-        shopCategoriesTableView.setOnMouseClicked(mouseEvent -> {
-            CategoryModel p = shopCategoriesTableView.getSelectionModel().getSelectedItem();
-            setItemsToGrid(p.getId(), "");
-        });
         vendorOrdersTableView.setOnMouseClicked(mouseEvent -> {
             VendorOrderModel p = vendorOrdersTableView.getSelectionModel().getSelectedItem();
-            showVendorOrderItems(p.getId(), p.getInStock());
-            addOrderItemBtn.setDisable(!p.getInStock().equals("In Order"));
+            if(p!=null){
+                showVendorOrderItems(p.getId(), p.getInStock());
+                addOrderItemBtn.setDisable(!p.getInStock().equals("In Order"));
+            }
         });
         vendorOrdersItemTableView.setOnMouseClicked(mouseEvent -> {
             ItemModel p = vendorOrdersItemTableView.getSelectionModel().getSelectedItem();
-            showUpdateItemPopup(p.getId());
+            if(p!=null) showUpdateItemPopup(p.getId());
             VendorOrderModel pi = vendorOrdersTableView.getSelectionModel().getSelectedItem();
-            showVendorOrderItems(pi.getId(), pi.getInStock());
+            if(pi!=null) showVendorOrderItems(pi.getId(), pi.getInStock());
         });
         addVendorOrderBtn.setOnAction((event)->{
             HashMap<String, Object> resultMap = showAddVendorOrderPopupWindow();
             VendorModel p = vendorsTableView.getSelectionModel().getSelectedItem();
-            if(resultMap.get("orderTitle") != null){
+            if(p != null && resultMap.get("orderTitle") != null){
                 String query = "insert into vendor_orders(v_order_title, v_id) values('"+resultMap.get("orderTitle")+"','"+p.getId()+"')";
                 dbConnection.executeQuery(query);
                 showVendorOrders(p.getId());
@@ -174,7 +207,7 @@ public class MainController extends AbstractController implements Initializable 
         addOrderItemBtn.setOnAction((event)->{
             HashMap<String, Object> resultMap = showAddItemPopup();
             VendorOrderModel p = vendorOrdersTableView.getSelectionModel().getSelectedItem();
-            showVendorOrderItems(p.getId(), p.getInStock());
+            if(p!=null) showVendorOrderItems(p.getId(), p.getInStock());
         });
     }
 
@@ -202,24 +235,55 @@ public class MainController extends AbstractController implements Initializable 
             st = connection.createStatement();
             rs = st.executeQuery(query);
             String itemType;
+            String stockRem;
             while (rs.next()){
                 if(rs.getInt("itemType")==0){
                     itemType="/kg";
+                    stockRem = rs.getString("i.stock")+" kgs rem.";
                 }else {
                     itemType="/unit";
+                    stockRem = Math.round(rs.getFloat("i.stock"))+" unts\n rem.";
                 }
                 addButton(rs.getInt("i.id"), rs.getString("i.title")+"\n("+
                         rs.getString("c.title")+")"+"\n₹ "+
-                        rs.getString("i.mrp")+itemType);
+                        rs.getString("i.mrp")+itemType+"\n\n"+stockRem);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
 
+    public int GetOrCreateOrder(){
+        Connection connection = dbConnection.getConnection();
+        String query = "SELECT * FROM shop_orders where status='0'";
+        Statement st;
+        ResultSet rs;
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(query);
+            if(rs.next()){
+                return rs.getInt("id");
+            }
+            else {
+                query = "insert into shop_orders(status) values('0')";
+                int return_result = dbConnection.executeQuery(query);
+                if(return_result>0) {
+                    query = "SELECT * FROM shop_orders where status='0'";
+                    rs = st.executeQuery(query);
+                    if(rs.next()){
+                        return rs.getInt("id");
+                    }
+                }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return 0;
+        }
+        return 0;
+    }
+
     public boolean hasItems(int id) throws SQLException {
         Connection connection = dbConnection.getConnection();
-
         String query = "SELECT * FROM items i JOIN categories c on c.id = i.cat_id where i.vo_id = '"+id+"'";
         Statement st;
         ResultSet rs;
@@ -322,6 +386,35 @@ public class MainController extends AbstractController implements Initializable 
         return itemPopup.getResult();
     }
 
+    private HashMap<String, Object> showThemesListPopup() {
+        HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("../xml/ThemeList.fxml"));
+        ThemesList themesList = new ThemesList();
+        loader.setController(themesList);
+        Parent layout;
+        try {
+            layout = loader.load();
+            Scene scene = new Scene(layout, 1800, 850);
+            scene.getRoot().getStylesheets().add(dbConnection.getTheme());
+            Stage popupStage = new Stage();
+            themesList.setStage(popupStage);
+            if(this.main!=null) {
+                popupStage.initOwner(main.getPrimaryStage());
+            }
+            popupStage.initModality(Modality.WINDOW_MODAL);
+            popupStage.setTitle("Appearance | InventoryMS");
+            popupStage.resizableProperty().setValue(Boolean.FALSE);
+            popupStage.setScene(scene);
+            popupStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return themesList.getResult();
+    }
+
     private HashMap<String, Object> showCategoryPopupWindow() {
         HashMap<String, Object> resultMap = new HashMap<String, Object>();
         FXMLLoader loader = new FXMLLoader();
@@ -367,6 +460,62 @@ public class MainController extends AbstractController implements Initializable 
             }
             popupStage.initModality(Modality.WINDOW_MODAL);
             popupStage.setTitle("Add Vendor | InventoryMS");
+            popupStage.resizableProperty().setValue(Boolean.FALSE);
+            popupStage.setScene(scene);
+            popupStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return popupController.getResult();
+    }
+    private HashMap<String, Object> showAddToCartPopup(int itemId, int orderId) {
+        HashMap<String, Object> resultMap = new HashMap<String, Object>();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("../xml/AddToCartPopup.fxml"));
+        AddToCartPopup popupController = new AddToCartPopup();
+        loader.setController(popupController);
+        popupController.itemId = itemId;
+        popupController.orderId = orderId;
+        Parent layout;
+        try {
+            layout = loader.load();
+            Scene scene = new Scene(layout, 500, 350);
+            scene.getRoot().getStylesheets().add(dbConnection.getTheme());
+            Stage popupStage = new Stage();
+            popupController.setStage(popupStage);
+            if(this.main!=null) {
+                popupStage.initOwner(main.getPrimaryStage());
+            }
+            popupStage.initModality(Modality.WINDOW_MODAL);
+            popupStage.setTitle("Set Quantity | InventoryMS");
+            popupStage.resizableProperty().setValue(Boolean.FALSE);
+            popupStage.setScene(scene);
+            popupStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return popupController.getResult();
+    }
+    private HashMap<String, Object> showUpdateCartPopup(int itemId, int orderId) {
+        HashMap<String, Object> resultMap = new HashMap<String, Object>();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("../xml/UpdateCartItemPopup.fxml"));
+        UpdateCartItem popupController = new UpdateCartItem();
+        loader.setController(popupController);
+        popupController.itemId = itemId;
+        popupController.orderId = orderId;
+        Parent layout;
+        try {
+            layout = loader.load();
+            Scene scene = new Scene(layout, 500, 350);
+            scene.getRoot().getStylesheets().add(dbConnection.getTheme());
+            Stage popupStage = new Stage();
+            popupController.setStage(popupStage);
+            if(this.main!=null) {
+                popupStage.initOwner(main.getPrimaryStage());
+            }
+            popupStage.initModality(Modality.WINDOW_MODAL);
+            popupStage.setTitle("Update Quantity | InventoryMS");
             popupStage.resizableProperty().setValue(Boolean.FALSE);
             popupStage.setScene(scene);
             popupStage.showAndWait();
@@ -476,6 +625,36 @@ public class MainController extends AbstractController implements Initializable 
         }
         return vendorOrdersItemList;
     }
+    public ObservableList<CartsModel> getCartItemsList(int id){
+        ObservableList<CartsModel> cartsModels = FXCollections.observableArrayList();
+        Connection connection = dbConnection.getConnection();
+        String query = "SELECT * FROM order_items oi JOIN items i on oi.item_id=i.id JOIN categories c on c.id = i.cat_id where oi.order_id = '"+id+"'";
+        Statement st;
+        ResultSet rs;
+        double total = 0;
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(query);
+            CartsModel cartsModel;
+            while(rs.next()) {
+                cartsModel = new CartsModel(
+                        rs.getInt("oi.id"),
+                        rs.getInt("i.id"),
+                        rs.getString("i.title"),
+                        rs.getFloat("oi.qty"),
+                        rs.getFloat("i.mrp"),
+                        rs.getInt("i.itemType"),
+                        rs.getString("c.title")
+                        );
+                cartsModels.add(cartsModel);
+                total+=cartsModel.getPayable();
+            }
+            System.out.println(total);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cartsModels;
+    }
 
     public void showCategories() {
         ObservableList<CategoryModel> list = getCategoriesList(false);
@@ -503,6 +682,16 @@ public class MainController extends AbstractController implements Initializable 
         vo_title.setCellValueFactory(new PropertyValueFactory<>("title"));
         vo_status.setCellValueFactory(new PropertyValueFactory<>("inStock"));
         vendorOrdersTableView.setItems(list);
+    }
+
+    public void showCartItems() {
+        ObservableList<CartsModel> list = getCartItemsList(GetOrCreateOrder());
+        order_item_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        order_item_title.setCellValueFactory(new PropertyValueFactory<>("title"));
+        order_item_price.setCellValueFactory(new PropertyValueFactory<>("mrp"));
+        order_item_qty.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        order_item_amount.setCellValueFactory(new PropertyValueFactory<>("payable"));
+        ordersItemTableView.setItems(list);
     }
 
     public void showVendorOrderItems(int id, String stockStatus) {

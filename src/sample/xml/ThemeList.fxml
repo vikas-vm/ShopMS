@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<?import javafx.collections.FXCollections?>
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <center>
+            <GridPane hgap="15">
+                <columnConstraints>
+                    <ColumnConstraints prefWidth="182.0" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="30.0" vgrow="ALWAYS"/>
+                </rowConstraints>
+                <TableView fx:id="themeTable" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <columns >
+                        <TableColumn fx:id="theme" text="Themes" prefWidth="180" />
+                    </columns>
+                </TableView>
+
+                <GridPane vgap="5" hgap="5" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="1600">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="30.0" vgrow="ALWAYS"/>
+                        <RowConstraints vgrow="ALWAYS" maxHeight="60" minHeight="50.0"/>
+                    </rowConstraints>
+                    <GridPane hgap="20" vgap="2" GridPane.columnIndex="0" GridPane.rowIndex="0">
+
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="250.0"/>
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" prefWidth="900"/>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="442.0"/>
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints  minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        </rowConstraints>
+
+                        <HBox GridPane.columnIndex="0" GridPane.rowIndex="0" prefWidth="250">
+                            <GridPane>
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="250.0"/>
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints minHeight="30.0" vgrow="ALWAYS" maxHeight="40"/>
+                                    <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                </rowConstraints>
+                                <HBox GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER">
+                                    <VBox>
+                                        <TextField promptText="search here" fx:id="searchField"  prefHeight="40" prefWidth="350" minHeight="30"/>
+                                    </VBox>
+                                    <VBox>
+                                        <Button prefHeight="50" fx:id="clearSearchBtn" prefWidth="50" minHeight="30" text="X"/>
+                                    </VBox>
+                                </HBox>
+
+                                <TableView fx:id="shopCategoriesTableView" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                    <columns>
+                                        <TableColumn fx:id="shop_cat_id" text="ID" prefWidth="30"/>
+                                        <TableColumn fx:id="shop_cat_title" text="Category" minWidth="100" maxWidth="318"/>
+                                    </columns>
+                                </TableView>
+                            </GridPane>
+                        </HBox>
+
+                        <HBox GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="900">
+
+                            <GridPane>
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="100.0"/>
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints minHeight="30.0" vgrow="ALWAYS" maxHeight="40"/>
+                                    <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS"/>
+                                </rowConstraints>
+                                <ListView fx:id="gridListView" GridPane.columnIndex="0" GridPane.rowIndex="1" prefWidth="1200">
+                                    <GridPane fx:id="shopItemsGrid" BorderPane.alignment="CENTER" vgap="10" hgap="10">
+                                        <columnConstraints>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0"/>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0"/>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0"/>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0"/>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0"/>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0"/>
+                                        </columnConstraints>
+                                    </GridPane>
+                                </ListView>
+                            </GridPane>
+                        </HBox>
+
+
+                        <HBox GridPane.columnIndex="2" GridPane.rowIndex="0">
+
+                            <GridPane vgap="5" hgap="5">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="442.0"/>
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints minHeight="30.0" vgrow="ALWAYS" maxHeight="40"/>
+                                    <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS"/>
+                                    <RowConstraints vgrow="ALWAYS" maxHeight="40" minHeight="30.0"/>
+                                </rowConstraints>
+                                <TableView fx:id="ordersItemTableView" GridPane.columnIndex="0" GridPane.rowIndex="1" prefWidth="442.0">
+                                    <columns >
+                                        <TableColumn fx:id="order_item_id" text="ID" prefWidth="30"/>
+                                        <TableColumn fx:id="order_item_title" text="Item" minWidth="50" prefWidth="135" maxWidth="135"/>
+                                        <TableColumn fx:id="order_item_qty" text="Qty/Amt" minWidth="90" maxWidth="105"/>
+                                        <TableColumn fx:id="order_item_price" text="Price(per unit)" minWidth="70" prefWidth="85"/>
+                                        <TableColumn fx:id="order_item_amount" text="Payable price" minWidth="100" prefWidth="100"/>
+                                    </columns>
+                                </TableView>
+                                <HBox GridPane.rowIndex="2" prefHeight="30" GridPane.columnIndex="0" alignment="BOTTOM_RIGHT">
+                                    <Button prefHeight="40" prefWidth="442" disable="true"  text="Place Order" fx:id="placeOrderBtn"/>
+                                </HBox>
+                            </GridPane>
+                        </HBox>
+                    </GridPane>
+
+                    <HBox GridPane.rowIndex="1" prefHeight="60" GridPane.columnIndex="0" alignment="BOTTOM_RIGHT">
+                        <VBox>
+                            <Button prefHeight="60" prefWidth="200"  text="Apply theme" fx:id="applyBtn"/>
+                        </VBox>
+                    </HBox>
+                </GridPane>
+            </GridPane>
+        </center>
+    </BorderPane>
+
+</AnchorPane>

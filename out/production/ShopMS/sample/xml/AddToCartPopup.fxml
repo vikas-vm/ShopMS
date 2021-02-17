@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+
+    <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <center>
+            <GridPane xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
+
+                <TextField fx:id="qty" GridPane.columnIndex="1" GridPane.rowIndex="5" promptText="10(for kg)/10.500(for kg)/10(for units)"/>
+                <Button  fx:id="addToCartBtn" text="Move To Order" GridPane.columnIndex="1" GridPane.rowIndex="7" prefWidth="300"/>
+
+                <Label text="Price :" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label fx:id="mrp" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                <Label fx:id="stockLabel" text="Price:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <Label fx:id="stock" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                <Label fx:id="qtyLabel" text="AMT/QTY*:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                <Label fx:id="title" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.columnSpan="2" scaleY="2" scaleX="2"/>
+
+                <Label GridPane.rowIndex="1"/>
+                <Label GridPane.rowIndex="8"/>
+
+
+            </GridPane>
+        </center>
+    </BorderPane>
+
+</AnchorPane>

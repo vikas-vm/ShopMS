@@ -67,6 +67,10 @@
     -fx-background-color: derive(-fx-base,15%);
 }
 
+.list-cell:focused, .list-cell:filled:selected {
+    -fx-background-color: derive(-fx-base,15%);
+    -fx-text-fill: white;
+}
 .scroll-bar{
     -fx-background-color: derive(-fx-base,45%)
 }
