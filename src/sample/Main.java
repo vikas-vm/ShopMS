@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import sample.controllers.MainController;
+import sample.controllers.LoginController;
 
 public class Main extends Application {
 
@@ -15,21 +15,19 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         this.primaryStage = primaryStage;
-        primaryStage.setMaximized(true);
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("xml/MainWindow.fxml"));
-        MainController mainController = new MainController();
-        mainController.setMainApp(this);
-        loader.setController(mainController);
+        loader.setLocation(getClass().getResource("/sample/xml/login.fxml"));
+        LoginController loginController = new LoginController();
+        loginController.setMainApp();
+        loader.setController(loginController);
         Parent layout = loader.load();
-        Scene scene = new Scene(layout , 700, 800);
+        Scene scene = new Scene(layout , 450, 320);
         scene.getRoot().getStylesheets().add(dbConnection.getTheme());
         primaryStage.setScene(scene);
         primaryStage.show();
-        primaryStage.setTitle("InventoryMS");
+        primaryStage.setTitle("InventoryMS | login panel");
 
     }
-
     public static void main(String[] args) {
         launch(args);
     }

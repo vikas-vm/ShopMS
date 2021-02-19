@@ -55,6 +55,6 @@ public class CartsModel {
     }
 
     public String getMrp() {
-        return String.valueOf(mrp);
+        return "₹ "+ mrp;
     }
 }

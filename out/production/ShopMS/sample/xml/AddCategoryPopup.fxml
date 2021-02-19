@@ -10,8 +10,7 @@
         <top>
             <GridPane alignment="CENTER" hgap="20">
                 <padding><Insets top="35" right="25" left="25"/></padding>
-                <Label text="Add New Category"
-                      GridPane.columnIndex="0" GridPane.rowIndex="0"
+                <Label text="Add New Category" GridPane.columnIndex="0" GridPane.rowIndex="0"
                       GridPane.columnSpan="2" scaleY="2" scaleX="2"/>
             </GridPane>
         </top>

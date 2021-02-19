@@ -50,12 +50,12 @@ public class UpdateCartItem extends AbstractController implements Initializable 
             updateCartItem();
         });
         deleteBtn.setOnAction((event)->{
-
             deleteItem();
         });
     }
     public void setForm(){
-        String query = "SELECT * FROM order_items oi JOIN items i on i.id = oi.item_id JOIN categories c on c.id = i.cat_id JOIN vendor_orders vo on vo.id = i.vo_id where oi.item_id = '"+itemId+"'";
+        String query = "SELECT * FROM order_items oi JOIN items i on i.id = oi.item_id JOIN categories c on c.id = i.cat_id JOIN vendor_orders vo on vo.id = i.vo_id" +
+                " where oi.item_id = '"+itemId+"' and oi.order_id='"+orderId+"'";
         Statement st;
         ResultSet rs;
 
@@ -68,6 +68,8 @@ public class UpdateCartItem extends AbstractController implements Initializable 
                 availStock = rs.getFloat("i.stock");
                 title.setText(rs.getString("i.title")+" ("+rs.getString("c.title")+")");
                 if(rs.getInt("i.itemType")==0){
+                    System.out.println(rs.getString("oi.qty"));
+                    qty.setText(rs.getString("oi.qty"));
                     mrp.setText(rs.getString("i.mrp")+"/kg");
                     qtyLabel.setText("Quantity (in kg):");
                     stockLabel.setText("Available Quantity:");
@@ -75,6 +77,7 @@ public class UpdateCartItem extends AbstractController implements Initializable 
                     qtyTextFieldProperty(false);
                 }
                 else {
+                    qty.setText(String.valueOf(Math.round(rs.getFloat("oi.qty"))));
                     mrp.setText(rs.getString("i.mrp")+"/unt");
                     qtyLabel.setText("Unts:");
                     stockLabel.setText("Available in stock:");

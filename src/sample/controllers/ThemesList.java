@@ -1,24 +1,15 @@
-
 package sample.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.DbConnection;
 import sample.models.*;
-
-import javax.swing.plaf.RootPaneUI;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -81,8 +72,6 @@ public class ThemesList extends AbstractController implements Initializable {
                 Parent root = stage2.getScene().getRoot();
                 root.getStylesheets().clear();
                 root.getStylesheets().add("/sample/themes/"+p.getTitle()+".css");
-
-
             }
         });
     }
@@ -93,11 +82,6 @@ public class ThemesList extends AbstractController implements Initializable {
         final Button temp = new Button(btnText);
         temp.setId("" + id);
         temp.getStyleClass().add("item-special-button");
-        temp.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-            }
-        });
         shopItemsGrid.add(temp, x, y);
         if(x==5){
             x=0;
@@ -142,10 +126,13 @@ public class ThemesList extends AbstractController implements Initializable {
     public ObservableList<ThemesModel> getList(){
         ObservableList<ThemesModel> themesModels = FXCollections.observableArrayList();
         ThemesModel themesModel;
-        themesModel = new ThemesModel(1,"light-theme");
-        themesModels.add(themesModel);
-        themesModel = new ThemesModel(2,"dark-theme");
-        themesModels.add(themesModel);
+        String[] ar = { "light-theme", "dark-theme", "dark-theme-stripped", "dark-standard", "dark-fabulous-orange",
+                "dark-chocolate", "material-red", "material-yellow", "material-blue-dark"};
+        int i;
+        for (i = 0; i < ar.length; i++) {
+            themesModel = new ThemesModel(1,ar[i]);
+            themesModels.add(themesModel);
+        }
         return themesModels;
     }
 
@@ -160,8 +147,6 @@ public class ThemesList extends AbstractController implements Initializable {
         }
     }
     public void showCategories() {
-
-
         ObservableList<CategoryModel> list1 = getCategoriesList();
         shop_cat_id.setCellValueFactory(new PropertyValueFactory<>("id"));
         shop_cat_title.setCellValueFactory(new PropertyValueFactory<>("category"));
@@ -202,7 +187,6 @@ public class ThemesList extends AbstractController implements Initializable {
         String query = "SELECT * FROM order_items oi JOIN items i on oi.item_id=i.id JOIN categories c on c.id = i.cat_id where oi.order_id = '"+id+"'";
         Statement st;
         ResultSet rs;
-        double total = 0;
         try {
             st = connection.createStatement();
             rs = st.executeQuery(query);
@@ -218,9 +202,7 @@ public class ThemesList extends AbstractController implements Initializable {
                         rs.getString("c.title")
                 );
                 cartsModels.add(cartsModel);
-                total+=cartsModel.getPayable();
             }
-            System.out.println(total);
         } catch (Exception e) {
             e.printStackTrace();
         }

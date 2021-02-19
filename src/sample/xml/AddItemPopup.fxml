@@ -24,11 +24,11 @@
                 <Label text="Title*:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
                 <TextField fx:id="title" GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="Item title"/>
 
-                <Label text="Retail Price:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                <TextField fx:id="mrp" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" promptText="unit price"/>
-
                 <Label text="Purchase Price:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
                 <TextField fx:id="price" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" promptText="unit price"/>
+
+                <Label text="Retail Price:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <TextField fx:id="mrp" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" promptText="unit price"/>
 
                 <Label text="Item Type*:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
                 <ComboBox fx:id="itemType" GridPane.columnIndex="1" GridPane.rowIndex="4" prefWidth="350" promptText="Choose item type">

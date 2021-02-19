@@ -28,9 +28,12 @@ import java.util.ResourceBundle;
 
 
 public class MainController extends AbstractController implements Initializable {
-    public Button addCategoryBtn, addVendorBtn, addVendorOrderBtn, addOrderItemBtn, moveToStockBtn, clearSearchBtn;
+    public Button addCategoryBtn, addVendorBtn, addVendorOrderBtn, addOrderItemBtn, moveToStockBtn, clearSearchBtn,
+    placeOrderBtn;
     public TextField searchField;
     public MenuItem themeBtn;
+    public MenuItem logoutBtn;
+    public Label totalAmt;
 
     @FXML
     private TableView<CategoryModel> categoriesTableView, shopCategoriesTableView;
@@ -105,8 +108,8 @@ public class MainController extends AbstractController implements Initializable 
             }
             else {
                 showAddToCartPopup(id, orderId);
-                showCartItems();
             }
+            showCartItems();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -117,16 +120,25 @@ public class MainController extends AbstractController implements Initializable 
         setItemsToGrid(0,"");
         showCategories();
         showCartItems();
+
         addVendorOrderBtn.setDisable(true);
         addOrderItemBtn.setDisable(true);
         moveToStockBtn.setDisable(true);
         showVendors();
+        placeOrderBtn.setOnAction((event)->{PlaceOrder();});
         themeBtn.setOnAction((event)->{
             showThemesListPopup();
             Stage stage2 = (Stage) moveToStockBtn.getScene().getWindow();
             Parent root = stage2.getScene().getRoot();
             root.getStylesheets().clear();
             root.getStylesheets().add(dbConnection.getTheme());
+        });
+        logoutBtn.setOnAction((event)->{
+            try {
+                logout();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
         moveToStockBtn.setOnAction((event)->{
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -209,6 +221,23 @@ public class MainController extends AbstractController implements Initializable 
             VendorOrderModel p = vendorOrdersTableView.getSelectionModel().getSelectedItem();
             if(p!=null) showVendorOrderItems(p.getId(), p.getInStock());
         });
+    }
+
+    public void logout() throws IOException {
+        Stage primaryStage = new Stage();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/sample/xml/login.fxml"));
+        LoginController loginController = new LoginController();
+        loginController.setMainApp();
+        loader.setController(loginController);
+        Parent layout = loader.load();
+        Scene scene = new Scene(layout , 450, 320);
+        scene.getRoot().getStylesheets().add(dbConnection.getTheme());
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("InventoryMS | login panel");
+        primaryStage.show();
+        Stage stage2 = (Stage) moveToStockBtn.getScene().getWindow();
+        stage2.close();
     }
 
     public void setItemsToGrid(int id, String search){
@@ -649,7 +678,7 @@ public class MainController extends AbstractController implements Initializable 
                 cartsModels.add(cartsModel);
                 total+=cartsModel.getPayable();
             }
-            System.out.println(total);
+            totalAmt.setText("₹ "+ total);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -750,6 +779,16 @@ public class MainController extends AbstractController implements Initializable 
             alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
             alert.show();
         }
+    }
+    public void PlaceOrder(){
+        int order_id = GetOrCreateOrder();
+        String query = "UPDATE order_items oi JOIN items i on oi.item_id=i.id set i.stock=i.stock-oi.qty where oi.order_id='"+order_id+"'";
+        dbConnection.executeQuery(query);
+        query = "UPDATE shop_orders so  set so.status='1' where id='"+order_id+"'";
+        dbConnection.executeQuery(query);
+        setItemsToGrid(0,"");
+        ordersItemTableView.setItems(null);
+        totalAmt.setText("0");
     }
 
 }

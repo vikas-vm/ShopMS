@@ -16,3 +16,17 @@
 .scroll-bar{
     -fx-background-color: derive(-fx-base,45%)
 }
+.list-cell:even,
+.list-cell:odd,
+.table-row-cell:even,
+.table-row-cell:odd{
+    -fx-control-inner-background: derive(-fx-base, 15%);
+}
+.list-cell:empty,
+.table-row-cell:empty {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header .label{
+    -fx-alignment: CENTER_LEFT;
+}

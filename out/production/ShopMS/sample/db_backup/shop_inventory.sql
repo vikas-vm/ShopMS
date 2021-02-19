@@ -58,7 +58,7 @@ CREATE TABLE `appearance` (
 --
 
 INSERT INTO `appearance` (`id`, `themeFile`, `status`) VALUES
-(1, 'dark-theme.css', '0');
+(1, 'dark-theme-stripped.css', '0');
 
 -- --------------------------------------------------------
 

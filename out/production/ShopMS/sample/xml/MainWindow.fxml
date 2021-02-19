@@ -56,7 +56,7 @@
                     <MenuItem text="User" disable="true"/>
                     <MenuItem text="Online Manual" visible="false"/>
                     <SeparatorMenuItem/>
-                    <MenuItem text="log out"/>
+                    <MenuItem fx:id="logoutBtn" text="log out"/>
                 </Menu>
             </MenuBar>
         </top>
@@ -96,7 +96,7 @@
                                 <TableView fx:id="shopCategoriesTableView" GridPane.columnIndex="0" GridPane.rowIndex="1">
                                     <columns>
                                         <TableColumn fx:id="shop_cat_id" text="ID" prefWidth="30"/>
-                                        <TableColumn fx:id="shop_cat_title" text="Category" minWidth="100" maxWidth="318"/>
+                                        <TableColumn fx:id="shop_cat_title" text="Category" minWidth="100" prefWidth="218" maxWidth="318"/>
                                     </columns>
                                 </TableView>
                             </GridPane>
@@ -138,17 +138,26 @@
                                     <RowConstraints minHeight="30.0" vgrow="ALWAYS" maxHeight="40"/>
                                     <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS"/>
                                     <RowConstraints vgrow="ALWAYS" maxHeight="40" minHeight="30.0"/>
+                                    <RowConstraints vgrow="ALWAYS" maxHeight="40" minHeight="30.0"/>
                                 </rowConstraints>
                                 <TableView fx:id="ordersItemTableView" GridPane.columnIndex="0" GridPane.rowIndex="1" prefWidth="442.0">
                                     <columns >
                                         <TableColumn fx:id="order_item_id" text="ID" prefWidth="30"/>
-                                        <TableColumn fx:id="order_item_title" text="Item" minWidth="50" prefWidth="135" maxWidth="135"/>
+                                        <TableColumn fx:id="order_item_title" text="Item" minWidth="50" prefWidth="130" maxWidth="130"/>
                                         <TableColumn fx:id="order_item_qty" text="Qty/Amt" minWidth="90" maxWidth="105"/>
                                         <TableColumn fx:id="order_item_price" text="Price(per unit)" minWidth="70" prefWidth="85"/>
                                         <TableColumn fx:id="order_item_amount" text="Payable price" minWidth="100" prefWidth="100"/>
                                     </columns>
                                 </TableView>
-                                <HBox GridPane.rowIndex="2" prefHeight="30" GridPane.columnIndex="0" alignment="BOTTOM_RIGHT">
+                                <HBox GridPane.rowIndex="2" prefHeight="30" GridPane.columnIndex="0" alignment="CENTER">
+                                    <VBox prefWidth="300" alignment="TOP_CENTER">
+                                        <Label text="Total :"/>
+                                    </VBox>
+                                    <VBox prefWidth="100" alignment="TOP_RIGHT">
+                                        <Label fx:id="totalAmt" text="Total"/>
+                                    </VBox>
+                                </HBox>
+                                <HBox GridPane.rowIndex="3" prefHeight="30" GridPane.columnIndex="0" alignment="BOTTOM_RIGHT">
                                     <Button prefHeight="40" prefWidth="442" text="Place Order" fx:id="placeOrderBtn"/>
                                 </HBox>
                             </GridPane>
