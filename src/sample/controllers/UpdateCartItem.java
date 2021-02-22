@@ -26,11 +26,12 @@ public class UpdateCartItem extends AbstractController implements Initializable 
     public int orderId;
     public float availStock;
 
-    public Button updateCartItemBtn, deleteBtn;
+    public Button updateCartItemBtn, deleteBtn, closeBtn, updatePriceBtn;
     public TextField qty;
     public Label title, mrp,stockLabel,stock,qtyLabel;
     private final HashMap<String, Object> result = new HashMap<String, Object>();
     private Stage stage = null;
+
     DbConnection dbConnection = new DbConnection();
 
     public void setStage(Stage stage) {
@@ -52,6 +53,12 @@ public class UpdateCartItem extends AbstractController implements Initializable 
         deleteBtn.setOnAction((event)->{
             deleteItem();
         });
+        closeBtn.setOnAction((event)->{
+            closeStage();
+        });
+        updatePriceBtn.setOnAction((event)->{
+            UpdatePrice();
+        });
     }
     public void setForm(){
         String query = "SELECT * FROM order_items oi JOIN items i on i.id = oi.item_id JOIN categories c on c.id = i.cat_id JOIN vendor_orders vo on vo.id = i.vo_id" +
@@ -70,7 +77,7 @@ public class UpdateCartItem extends AbstractController implements Initializable 
                 if(rs.getInt("i.itemType")==0){
                     System.out.println(rs.getString("oi.qty"));
                     qty.setText(rs.getString("oi.qty"));
-                    mrp.setText(rs.getString("i.mrp")+"/kg");
+                    mrp.setText("₹ "+rs.getString("i.mrp")+"/kg");
                     qtyLabel.setText("Quantity (in kg):");
                     stockLabel.setText("Available Quantity:");
                     stock.setText(rs.getString("i.stock")+" kg");
@@ -78,7 +85,7 @@ public class UpdateCartItem extends AbstractController implements Initializable 
                 }
                 else {
                     qty.setText(String.valueOf(Math.round(rs.getFloat("oi.qty"))));
-                    mrp.setText(rs.getString("i.mrp")+"/unt");
+                    mrp.setText("₹ "+rs.getString("i.mrp")+"/unt");
                     qtyLabel.setText("Unts:");
                     stockLabel.setText("Available in stock:");
                     stock.setText(rs.getString("i.stock")+" unt");
@@ -91,6 +98,11 @@ public class UpdateCartItem extends AbstractController implements Initializable 
         }
     }
 
+    public void UpdatePrice(){
+        result.clear();
+        result.put("updateState", 1);
+        closeStage();
+    }
 
     public void qtyTextFieldProperty(boolean toInt){
         qty.textProperty().addListener((observable, oldValue, newValue) -> {

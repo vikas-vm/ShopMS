@@ -9,13 +9,14 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.layout.HBox?>
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                 AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
         <top>
             <GridPane alignment="CENTER" hgap="20">
-                <padding><Insets top="35" right="25" left="25"/></padding>
+                <padding><Insets top="85" right="25" left="25"/></padding>
                 <Label text="Admin Login"
                       GridPane.columnIndex="0" GridPane.rowIndex="0"
                       GridPane.columnSpan="2" scaleY="2" scaleX="2"/>
@@ -24,11 +25,16 @@
         <center>
             <GridPane xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
                 <Label text="User Name:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                <TextField fx:id="username" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
                 <PasswordField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <TextField fx:id="username" text="admin" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
                 <Button fx:id="loginButton" prefWidth="250" prefHeight="30" text="Login" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
             </GridPane>
         </center>
+        <bottom>
+            <HBox alignment="BOTTOM_RIGHT">
+                <Button fx:id="exitBtn" alignment="BOTTOM_RIGHT" prefHeight="30" text="exit"/>
+            </HBox>
+        </bottom>
     </BorderPane>
 </AnchorPane>

@@ -8,16 +8,16 @@
         <center>
             <GridPane xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
 
-                <TextField fx:id="qty" GridPane.columnIndex="1" GridPane.rowIndex="5" promptText="10(for kg)/10.500(for kg)/10(for units)"/>
-                <Button  fx:id="addToCartBtn" text="Move To Order" GridPane.columnIndex="1" GridPane.rowIndex="7" prefWidth="300"/>
+                <TextField fx:id="newMrp" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                <Button  fx:id="updatePriceBtn" text="update price" GridPane.columnIndex="1" GridPane.rowIndex="7" prefWidth="300"/>
 
-                <Label text="Price :" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label text="Current price :" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
                 <Label fx:id="mrp" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
                 <Label fx:id="stockLabel" text="Price:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
                 <Label fx:id="stock" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
-                <Label fx:id="qtyLabel" text="AMT/QTY*:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                <Label fx:id="newMrpLabel" text="AMT/QTY*:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
                 <Label fx:id="title" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.columnSpan="2" scaleY="2" scaleX="2"/>
 
                 <Label GridPane.rowIndex="1"/>
@@ -28,9 +28,6 @@
         </center>
         <bottom>
             <HBox alignment="BOTTOM_RIGHT">
-                <VBox alignment="BOTTOM_LEFT">
-                    <Button fx:id="updatePriceBtn" alignment="BOTTOM_LEFT" prefHeight="30" text="update price"/>
-                </VBox>
                 <VBox alignment="BOTTOM_RIGHT">
                     <Button fx:id="closeBtn" alignment="BOTTOM_RIGHT" prefHeight="30" text="close"/>
                 </VBox>

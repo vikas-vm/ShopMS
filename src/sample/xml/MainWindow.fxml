@@ -35,7 +35,7 @@
                     <MenuItem text="Save"/>
                     <MenuItem text="Save As"/>
                     <SeparatorMenuItem/>
-                    <MenuItem text="Exit"/>
+                    <MenuItem fx:id="exitMenu" text="Exit"/>
                 </Menu>
                 <Menu text="Edit">
                     <MenuItem text="Copy"/>
@@ -93,10 +93,10 @@
                                     </VBox>
                                 </HBox>
 
-                                <TableView fx:id="shopCategoriesTableView" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <TableView fx:id="shopCategoriesTableView" GridPane.columnIndex="0" GridPane.rowIndex="1" prefWidth="348">
                                     <columns>
                                         <TableColumn fx:id="shop_cat_id" text="ID" prefWidth="30"/>
-                                        <TableColumn fx:id="shop_cat_title" text="Category" minWidth="100" prefWidth="218" maxWidth="318"/>
+                                        <TableColumn fx:id="shop_cat_title" text="Category" minWidth="100" prefWidth="218" maxWidth="320"/>
                                     </columns>
                                 </TableView>
                             </GridPane>
@@ -112,6 +112,9 @@
                                     <RowConstraints minHeight="30.0" vgrow="ALWAYS" maxHeight="40"/>
                                     <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS"/>
                                 </rowConstraints>
+                                <HBox GridPane.columnIndex="0" GridPane.rowIndex="0" prefHeight="40">
+                                    <Button prefWidth="100" prefHeight="30" fx:id="reloadBtn" alignment="BOTTOM_RIGHT" text="reload"/>
+                                </HBox>
                                 <ListView fx:id="gridListView" GridPane.columnIndex="0" GridPane.rowIndex="1" prefWidth="1200">
                                     <GridPane fx:id="shopItemsGrid" BorderPane.alignment="CENTER" vgap="10" hgap="10">
                                         <columnConstraints>
@@ -140,10 +143,10 @@
                                     <RowConstraints vgrow="ALWAYS" maxHeight="40" minHeight="30.0"/>
                                     <RowConstraints vgrow="ALWAYS" maxHeight="40" minHeight="30.0"/>
                                 </rowConstraints>
-                                <TableView fx:id="ordersItemTableView" GridPane.columnIndex="0" GridPane.rowIndex="1" prefWidth="442.0">
+                                <TableView fx:id="ordersItemTableView" GridPane.columnIndex="0" GridPane.rowIndex="1" prefWidth="438.0">
                                     <columns >
                                         <TableColumn fx:id="order_item_id" text="ID" prefWidth="30"/>
-                                        <TableColumn fx:id="order_item_title" text="Item" minWidth="50" prefWidth="130" maxWidth="130"/>
+                                        <TableColumn fx:id="order_item_title" text="Item" minWidth="50" prefWidth="130" maxWidth="125"/>
                                         <TableColumn fx:id="order_item_qty" text="Qty/Amt" minWidth="90" maxWidth="105"/>
                                         <TableColumn fx:id="order_item_price" text="Price(per unit)" minWidth="70" prefWidth="85"/>
                                         <TableColumn fx:id="order_item_amount" text="Payable price" minWidth="100" prefWidth="100"/>
@@ -151,10 +154,10 @@
                                 </TableView>
                                 <HBox GridPane.rowIndex="2" prefHeight="30" GridPane.columnIndex="0" alignment="CENTER">
                                     <VBox prefWidth="300" alignment="TOP_CENTER">
-                                        <Label text="Total :"/>
+                                        <Label text="Total Amount:" scaleY="1.25" scaleX="1.25"/>
                                     </VBox>
                                     <VBox prefWidth="100" alignment="TOP_RIGHT">
-                                        <Label fx:id="totalAmt" text="Total"/>
+                                        <Label fx:id="totalAmt" scaleY="1.25" scaleX="1.25"/>
                                     </VBox>
                                 </HBox>
                                 <HBox GridPane.rowIndex="3" prefHeight="30" GridPane.columnIndex="0" alignment="BOTTOM_RIGHT">

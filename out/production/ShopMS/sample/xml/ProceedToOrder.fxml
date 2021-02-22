@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+
+    <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <center>
+            <GridPane hgap="20" vgap="2">
+
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="503.0"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="100.0"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints  minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                </rowConstraints>
+
+
+                <HBox GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <GridPane xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
+                        <HBox alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2">
+                            <Label text="Customer and payments details" scaleY="1.75" scaleX="1.35"/>
+                        </HBox>
+
+                        <Label text="Name :" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <TextField fx:id="name" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                        <Label text="Contact :" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <TextField fx:id="contact"  GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                        <Label text="Email :" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                        <TextField fx:id="email"  GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                        <Label text="Total Amount :" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+
+                        <Label text="Paid Amount :" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                        <TextField fx:id="paidAmt"  GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+                        <Label text="address :" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+                        <TextArea fx:id="address"  prefRowCount="5" prefColumnCount="25"  GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+
+                        <Button text="Place order" fx:id="placeOrderBtn" GridPane.columnIndex="1" prefWidth="400" GridPane.rowIndex="8"/>
+
+                        <Button text="Reset form" fx:id="resetFormBtn" GridPane.columnIndex="0" GridPane.rowIndex="10"/>
+                        <Button text="edit total" fx:id="editTotalBtn" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
+
+                        <TextField fx:id="totalAmt" text="80" GridPane.columnIndex="1" editable="false" GridPane.rowIndex="5"/>
+
+                        <Label GridPane.rowIndex="1"/>
+                        <Label GridPane.rowIndex="9"/>
+
+
+                    </GridPane>
+                </HBox>
+
+                <HBox GridPane.columnIndex="0" GridPane.rowIndex="0" minWidth="250">
+                    <GridPane>
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="533.0"/>
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints minHeight="30.0" vgrow="ALWAYS" maxHeight="40"/>
+                            <RowConstraints minHeight="30.0" prefHeight="30.0" maxHeight="40" vgrow="ALWAYS"/>
+                            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        </rowConstraints>
+                        <HBox GridPane.rowIndex="1" GridPane.columnIndex="0" alignment="CENTER">
+                            <VBox>
+                                <TextField promptText="search customer  here" fx:id="searchField"  prefHeight="40" prefWidth="470" minHeight="30"/>
+                            </VBox>
+                            <VBox>
+                                <Button prefHeight="50" fx:id="clearSearchBtn" prefWidth="60" minHeight="30" text="X"/>
+                            </VBox>
+                        </HBox>
+                        <HBox alignment="CENTER" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                            <Label alignment="TOP_CENTER" scaleY="2" text="Existing Customer lists"/>
+                        </HBox>
+                        <TableView fx:id="customersTableView" GridPane.columnIndex="0" GridPane.rowIndex="2" prefWidth="532">
+                            <columns>
+                                <TableColumn fx:id="id" text="ID" prefWidth="30"/>
+                                <TableColumn fx:id="customer_name" text="Name" minWidth="100" prefWidth="150" maxWidth="320"/>
+                                <TableColumn fx:id="customer_contact" text="Contact" minWidth="100" prefWidth="100" maxWidth="320"/>
+                                <TableColumn fx:id="customer_address" text="Address" minWidth="100" prefWidth="150" maxWidth="320"/>
+                                <TableColumn fx:id="customer_due" text="Due" minWidth="60" prefWidth="60"/>
+                            </columns>
+                        </TableView>
+                    </GridPane>
+                </HBox>
+            </GridPane>
+        </center>
+        <bottom>
+            <HBox alignment="BOTTOM_RIGHT">
+                <VBox alignment="BOTTOM_RIGHT">
+                    <Button fx:id="closeBtn" alignment="BOTTOM_RIGHT" prefHeight="30" text="close"/>
+                </VBox>
+            </HBox>
+        </bottom>
+    </BorderPane>
+
+</AnchorPane>

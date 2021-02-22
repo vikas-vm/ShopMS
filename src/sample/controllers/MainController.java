@@ -1,4 +1,5 @@
 package sample.controllers;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import sample.DbConnection;
 import sample.models.*;
 
@@ -29,10 +31,9 @@ import java.util.ResourceBundle;
 
 public class MainController extends AbstractController implements Initializable {
     public Button addCategoryBtn, addVendorBtn, addVendorOrderBtn, addOrderItemBtn, moveToStockBtn, clearSearchBtn,
-    placeOrderBtn;
+    placeOrderBtn, reloadBtn;
     public TextField searchField;
-    public MenuItem themeBtn;
-    public MenuItem logoutBtn;
+    public MenuItem themeBtn, logoutBtn, exitMenu;
     public Label totalAmt;
 
     @FXML
@@ -73,6 +74,11 @@ public class MainController extends AbstractController implements Initializable 
 
     int x;
     int y;
+    double totalAmount;
+
+    public MainController() {
+    }
+
     private void addButton(int id, String btnText) {
         final Button temp = new Button(btnText);
         temp.setId("" + id);
@@ -103,11 +109,18 @@ public class MainController extends AbstractController implements Initializable 
         try {
             st = connection.createStatement();
             rs = st.executeQuery(query);
+            HashMap<String, Object> result;
             if(rs.next()){
-                showUpdateCartPopup(id, orderId);
+                result = showUpdateCartPopup(id, orderId);
             }
             else {
-                showAddToCartPopup(id, orderId);
+                result = showAddToCartPopup(id, orderId);
+            }
+            if(result.get("updateState")!=null){
+                showLoginPopup();
+                showUpdatePricePopupWindow(id);
+                loadShop();
+                AddToCart(id);
             }
             showCartItems();
         } catch (SQLException throwables) {
@@ -117,15 +130,21 @@ public class MainController extends AbstractController implements Initializable 
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        setItemsToGrid(0,"");
-        showCategories();
-        showCartItems();
-
         addVendorOrderBtn.setDisable(true);
         addOrderItemBtn.setDisable(true);
         moveToStockBtn.setDisable(true);
         showVendors();
-        placeOrderBtn.setOnAction((event)->{PlaceOrder();});
+        loadShop();
+        reloadBtn.setOnAction(event->{
+            loadShop();
+        });
+        placeOrderBtn.setOnAction((event)->{
+            showProceedToOrderPopup();
+            loadShop();
+        });
+        exitMenu.setOnAction(event->{
+            exit();
+        });
         themeBtn.setOnAction((event)->{
             showThemesListPopup();
             Stage stage2 = (Stage) moveToStockBtn.getScene().getWindow();
@@ -141,6 +160,7 @@ public class MainController extends AbstractController implements Initializable 
             }
         });
         moveToStockBtn.setOnAction((event)->{
+            showLoginPopup();
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning");
             alert.setHeaderText("Are you sure to move this order in stock?");
@@ -157,6 +177,7 @@ public class MainController extends AbstractController implements Initializable 
                 VendorOrderModel p = vendorOrdersTableView.getSelectionModel().getSelectedItem();
                 moveToStock(p.getId());
                 showVendors();
+                loadShop();
             }
         });
 
@@ -222,22 +243,14 @@ public class MainController extends AbstractController implements Initializable 
             if(p!=null) showVendorOrderItems(p.getId(), p.getInStock());
         });
     }
+    private void loadShop(){
+        setItemsToGrid(0,"");
+        showCategories();
+        showCartItems();
 
+    }
     public void logout() throws IOException {
-        Stage primaryStage = new Stage();
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/sample/xml/login.fxml"));
-        LoginController loginController = new LoginController();
-        loginController.setMainApp();
-        loader.setController(loginController);
-        Parent layout = loader.load();
-        Scene scene = new Scene(layout , 450, 320);
-        scene.getRoot().getStylesheets().add(dbConnection.getTheme());
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("InventoryMS | login panel");
-        primaryStage.show();
-        Stage stage2 = (Stage) moveToStockBtn.getScene().getWindow();
-        stage2.close();
+        showLoginPopup();
     }
 
     public void setItemsToGrid(int id, String search){
@@ -352,6 +365,36 @@ public class MainController extends AbstractController implements Initializable 
             e.printStackTrace();
         }
         return addVendorOrderController.getResult();
+    }
+
+    private HashMap<String, Object> showUpdatePricePopupWindow(int id) {
+        HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("../xml/UpdateItemPrice.fxml"));
+        UpdateItemPrice updateItemPrice = new UpdateItemPrice();
+        updateItemPrice.itemId = id;
+        loader.setController(updateItemPrice);
+        System.out.println(id);
+        Parent layout;
+        try {
+            layout = loader.load();
+            Scene scene = new Scene(layout, 650, 450);
+            scene.getRoot().getStylesheets().add(dbConnection.getTheme());
+            Stage popupStage = new Stage();
+            updateItemPrice.setStage(popupStage);
+            if(this.main!=null) {
+                popupStage.initOwner(main.getPrimaryStage());
+            }
+            popupStage.initModality(Modality.WINDOW_MODAL);
+            popupStage.setTitle("Update Item Price | InventoryMS");
+            popupStage.resizableProperty().setValue(Boolean.FALSE);
+            popupStage.setScene(scene);
+            popupStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return updateItemPrice.getResult();
     }
 
     private HashMap<String, Object> showAddItemPopup() {
@@ -497,6 +540,33 @@ public class MainController extends AbstractController implements Initializable 
         }
         return popupController.getResult();
     }
+    public void showLoginPopup(){
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/sample/xml/login.fxml"));
+        LoginController popupController = new LoginController();
+        loader.setController(popupController);
+        Parent layout;
+        try {
+            layout = loader.load();
+            Scene scene = new Scene(layout, 500, 350);
+            scene.getRoot().getStylesheets().add(dbConnection.getTheme());
+            Stage popupStage = new Stage();
+            popupController.setStage(popupStage);
+            if(this.main!=null) {
+                popupStage.initOwner(main.getPrimaryStage());
+            }
+            popupStage.initModality(Modality.WINDOW_MODAL);
+            popupStage.initStyle(StageStyle.UNDECORATED);
+            popupStage.setTitle("Set Quantity | InventoryMS");
+            popupStage.resizableProperty().setValue(Boolean.FALSE);
+            popupStage.setScene(scene);
+            popupStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private HashMap<String, Object> showAddToCartPopup(int itemId, int orderId) {
         HashMap<String, Object> resultMap = new HashMap<String, Object>();
         FXMLLoader loader = new FXMLLoader();
@@ -517,6 +587,35 @@ public class MainController extends AbstractController implements Initializable 
             }
             popupStage.initModality(Modality.WINDOW_MODAL);
             popupStage.setTitle("Set Quantity | InventoryMS");
+            popupStage.resizableProperty().setValue(Boolean.FALSE);
+            popupStage.setScene(scene);
+            popupStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return popupController.getResult();
+    }
+
+    private HashMap<String, Object> showProceedToOrderPopup() {
+        HashMap<String, Object> resultMap = new HashMap<String, Object>();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("../xml/ProceedToOrder.fxml"));
+        ProceedToOrder popupController = new ProceedToOrder();
+        loader.setController(popupController);
+        popupController.orderId=GetOrCreateOrder();
+        popupController.total = totalAmount;
+        Parent layout;
+        try {
+            layout = loader.load();
+            Scene scene = new Scene(layout, 1050, 750);
+            scene.getRoot().getStylesheets().add(dbConnection.getTheme());
+            Stage popupStage = new Stage();
+            popupController.setStage(popupStage);
+            if(this.main!=null) {
+                popupStage.initOwner(main.getPrimaryStage());
+            }
+            popupStage.initModality(Modality.WINDOW_MODAL);
+            popupStage.setTitle("Proceed to order | InventoryMS");
             popupStage.resizableProperty().setValue(Boolean.FALSE);
             popupStage.setScene(scene);
             popupStage.showAndWait();
@@ -554,6 +653,10 @@ public class MainController extends AbstractController implements Initializable 
         return popupController.getResult();
     }
 
+    private void exit(){
+        Platform.exit();
+        System.exit(0);
+    }
     public ObservableList<VendorModel> getVendorsList(){
         ObservableList<VendorModel> vendorsList = FXCollections.observableArrayList();
         Connection connection = dbConnection.getConnection();
@@ -655,12 +758,13 @@ public class MainController extends AbstractController implements Initializable 
         return vendorOrdersItemList;
     }
     public ObservableList<CartsModel> getCartItemsList(int id){
+        placeOrderBtn.setDisable(true);
         ObservableList<CartsModel> cartsModels = FXCollections.observableArrayList();
         Connection connection = dbConnection.getConnection();
         String query = "SELECT * FROM order_items oi JOIN items i on oi.item_id=i.id JOIN categories c on c.id = i.cat_id where oi.order_id = '"+id+"'";
         Statement st;
         ResultSet rs;
-        double total = 0;
+        double total = 0, haveVal=0;
         try {
             st = connection.createStatement();
             rs = st.executeQuery(query);
@@ -677,7 +781,12 @@ public class MainController extends AbstractController implements Initializable 
                         );
                 cartsModels.add(cartsModel);
                 total+=cartsModel.getPayable();
+                haveVal=1;
             }
+            if(haveVal==1){
+                placeOrderBtn.setDisable(false);
+            }
+            totalAmount=total;
             totalAmt.setText("₹ "+ total);
         } catch (Exception e) {
             e.printStackTrace();
@@ -779,16 +888,6 @@ public class MainController extends AbstractController implements Initializable 
             alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
             alert.show();
         }
-    }
-    public void PlaceOrder(){
-        int order_id = GetOrCreateOrder();
-        String query = "UPDATE order_items oi JOIN items i on oi.item_id=i.id set i.stock=i.stock-oi.qty where oi.order_id='"+order_id+"'";
-        dbConnection.executeQuery(query);
-        query = "UPDATE shop_orders so  set so.status='1' where id='"+order_id+"'";
-        dbConnection.executeQuery(query);
-        setItemsToGrid(0,"");
-        ordersItemTableView.setItems(null);
-        totalAmt.setText("0");
     }
 
 }
