@@ -110,11 +110,14 @@ public class AddItemPopup extends AbstractController implements Initializable {
             st = connection.createStatement();
             rs = st.executeQuery(query);
             CategoryModel categoryModel;
+            int index=1;
             while(rs.next()) {
                 categoryModel = new CategoryModel(
+                        index,
                         rs.getInt("id"),
                         rs.getString("title")
                 );
+                index++;
                 categoryList.add(categoryModel);
             }
         } catch (Exception e) {

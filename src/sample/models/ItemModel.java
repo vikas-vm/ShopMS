@@ -5,6 +5,7 @@ import java.util.Objects;
 public class ItemModel {
 
     private final int id;
+    private final int index;
     private final String title;
     private final String stock;
     private final String price;
@@ -13,8 +14,9 @@ public class ItemModel {
     private final String cat;
     private final String initial;
 
-    public ItemModel(int Id, String title, String stock, String price, String mrp, int itemType, String cat, String initial){
+    public ItemModel(int index,int Id, String title, String stock, String price, String mrp, int itemType, String cat, String initial){
         this.id = Id;
+        this.index = index;
         this.title=title;
         this.stock=stock;
         this.price=price;
@@ -24,6 +26,9 @@ public class ItemModel {
         this.initial=initial;
     }
 
+    public int getIndex() {
+        return index;
+    }
     public int getId() {
         return id;
     }

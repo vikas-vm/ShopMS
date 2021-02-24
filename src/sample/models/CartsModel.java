@@ -3,6 +3,7 @@ package sample.models;
 public class CartsModel {
 
     private final int id;
+    private final int index;
     private final String title;
     private final float stock;
     private final float mrp;
@@ -11,8 +12,9 @@ public class CartsModel {
     private final int item_id;
     String stockStr;
 
-    public CartsModel(int Id, int item_id, String title, float stock, float mrp, int itemType, String cat) {
+    public CartsModel(int Index,int Id, int item_id, String title, float stock, float mrp, int itemType, String cat) {
         this.id = Id;
+        this.index = Index;
         this.item_id=item_id;
         this.title = title;
         this.stock = stock;
@@ -23,6 +25,9 @@ public class CartsModel {
 
     public int getId() {
         return id;
+    }
+    public int getIndex() {
+        return index;
     }
     public int getItem_id() {
         return item_id;

@@ -39,7 +39,7 @@ public class MainController extends AbstractController implements Initializable 
     @FXML
     private TableView<CategoryModel> categoriesTableView, shopCategoriesTableView;
     @FXML
-    private TableColumn<CategoryModel, Integer> cat_id, shop_cat_id;
+    private TableColumn<CategoryModel, Integer> cat_id;
     @FXML
     private TableColumn<CategoryModel, String> cat_title, shop_cat_title;
 
@@ -69,12 +69,19 @@ public class MainController extends AbstractController implements Initializable 
     private TableColumn<CartsModel, Integer> order_item_id;
     @FXML
     private TableColumn<CartsModel, String> order_item_title, order_item_price, order_item_qty, order_item_amount;
+    @FXML
+    private TableView<OrderModel> OrderTableView;
+    @FXML
+    private TableColumn<OrderModel, Integer> o_id;
+    @FXML
+    private TableColumn<OrderModel, String> order_c_name, order_total_amt, order_paid_amt;
     public GridPane shopItemsGrid;
     DbConnection dbConnection = new DbConnection();
+    Connection connection = dbConnection.getConnection();
 
     int x;
     int y;
-    double totalAmount;
+    float totalAmount;
 
     public MainController() {
     }
@@ -133,6 +140,7 @@ public class MainController extends AbstractController implements Initializable 
         addVendorOrderBtn.setDisable(true);
         addOrderItemBtn.setDisable(true);
         moveToStockBtn.setDisable(true);
+        PaymentsInitialize();
         showVendors();
         loadShop();
         reloadBtn.setOnAction(event->{
@@ -209,7 +217,9 @@ public class MainController extends AbstractController implements Initializable 
         });
         vendorsTableView.setOnMouseClicked(mouseEvent -> {
             VendorModel p = vendorsTableView.getSelectionModel().getSelectedItem();
-            showVendorOrders(p.getId());
+            if(p!=null){
+                showVendorOrders(p.getId());
+            }
             addOrderItemBtn.setDisable(true);
             moveToStockBtn.setDisable(true);
             vendorOrdersItemTableView.setItems(null);
@@ -257,7 +267,6 @@ public class MainController extends AbstractController implements Initializable 
         x=0;
         y=0;
         shopItemsGrid.getChildren().clear();
-        Connection connection = dbConnection.getConnection();
         String query;
         if(search.equals("")){
             if(id>0){
@@ -296,7 +305,6 @@ public class MainController extends AbstractController implements Initializable 
     }
 
     public int GetOrCreateOrder(){
-        Connection connection = dbConnection.getConnection();
         String query = "SELECT * FROM shop_orders where status='0'";
         Statement st;
         ResultSet rs;
@@ -325,7 +333,6 @@ public class MainController extends AbstractController implements Initializable 
     }
 
     public boolean hasItems(int id) throws SQLException {
-        Connection connection = dbConnection.getConnection();
         String query = "SELECT * FROM items i JOIN categories c on c.id = i.cat_id where i.vo_id = '"+id+"'";
         Statement st;
         ResultSet rs;
@@ -375,7 +382,6 @@ public class MainController extends AbstractController implements Initializable 
         UpdateItemPrice updateItemPrice = new UpdateItemPrice();
         updateItemPrice.itemId = id;
         loader.setController(updateItemPrice);
-        System.out.println(id);
         Parent layout;
         try {
             layout = loader.load();
@@ -659,7 +665,6 @@ public class MainController extends AbstractController implements Initializable 
     }
     public ObservableList<VendorModel> getVendorsList(){
         ObservableList<VendorModel> vendorsList = FXCollections.observableArrayList();
-        Connection connection = dbConnection.getConnection();
         String query = "SELECT * FROM vendors";
         Statement st;
         ResultSet rs;
@@ -668,10 +673,12 @@ public class MainController extends AbstractController implements Initializable 
             st = connection.createStatement();
             rs = st.executeQuery(query);
             VendorModel vendors;
+            int index=1;
             while(rs.next()) {
-                vendors = new VendorModel(rs.getInt("Id"),rs.getString("Title"),rs.getString("Contact"),
+                vendors = new VendorModel(index,rs.getInt("Id"),rs.getString("Title"),rs.getString("Contact"),
                         rs.getString("Email"),rs.getString("City"), rs.getString("Address"));
                 vendorsList.add(vendors);
+                index++;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -681,21 +688,22 @@ public class MainController extends AbstractController implements Initializable 
 
     public ObservableList<CategoryModel> getCategoriesList(boolean state){
         ObservableList<CategoryModel> categoryModels = FXCollections.observableArrayList();
-        Connection connection = dbConnection.getConnection();
         String query = "SELECT * FROM categories";
         Statement st;
         ResultSet rs;
         CategoryModel categoryModel;
         if(state){
-            categoryModel = new CategoryModel(0,"All");
+            categoryModel = new CategoryModel(0,0,"All");
             categoryModels.add(categoryModel);
         }
-        try {
+        try{
             st = connection.createStatement();
             rs = st.executeQuery(query);
+            int index=1;
             while(rs.next()) {
-                categoryModel = new CategoryModel(rs.getInt("id"),rs.getString("title"));
+                categoryModel = new CategoryModel(index,rs.getInt("id"),rs.getString("title"));
                 categoryModels.add(categoryModel);
+                index++;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -706,8 +714,7 @@ public class MainController extends AbstractController implements Initializable 
     public ObservableList<VendorOrderModel> getVendorOrdersList(int id){
         addVendorOrderBtn.setDisable(false);
         ObservableList<VendorOrderModel> vendorOrdersList = FXCollections.observableArrayList();
-        Connection connection = dbConnection.getConnection();
-        String query = "SELECT * FROM vendor_orders where v_id = '"+id+"'";
+        String query = "SELECT * FROM vendor_orders where v_id = '"+id+"' order by id desc";
         Statement st;
         ResultSet rs;
 
@@ -715,12 +722,15 @@ public class MainController extends AbstractController implements Initializable 
             st = connection.createStatement();
             rs = st.executeQuery(query);
             VendorOrderModel vendorOrders;
+            int index=1;
             while(rs.next()) {
                 vendorOrders = new VendorOrderModel(
+                        index,
                         rs.getInt("id"),
                         rs.getString("v_order_title"),
                         rs.getInt("inStock")
                 );
+                index++;
                 vendorOrdersList.add(vendorOrders);
             }
         } catch (Exception e) {
@@ -728,10 +738,42 @@ public class MainController extends AbstractController implements Initializable 
         }
         return vendorOrdersList;
     }
+    public ObservableList<OrderModel> getOrdersList(int id){
+        ObservableList<OrderModel> orderModels = FXCollections.observableArrayList();
+        String query;
+        if(id>0){
+            query = "SELECT * FROM shop_orders so join customers c on c.id = so.cust_id join payments p on p.order_id=so.id where so.id = '"+id+"' order by so.id desc";
+        }
+        else {
+            query = "SELECT * FROM shop_orders so join customers c on c.id = so.cust_id join payments p on p.order_id=so.id order by so.id desc";
+        }
+        Statement st;
+        ResultSet rs;
+
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(query);
+            OrderModel orderModel;
+            int index=1;
+            while(rs.next()) {
+                orderModel = new OrderModel(
+                        index,
+                        rs.getInt("so.id"),
+                        rs.getString("c.name"),
+                        rs.getFloat("so.total_amt"),
+                        rs.getFloat("p.amount")
+                );
+                index++;
+                orderModels.add(orderModel);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return orderModels;
+    }
 
     public ObservableList<ItemModel> getVendorOrdersItemList(int id){
         ObservableList<ItemModel> vendorOrdersItemList = FXCollections.observableArrayList();
-        Connection connection = dbConnection.getConnection();
         String query = "SELECT * FROM items i JOIN categories c on c.id = i.cat_id where i.vo_id = '"+id+"'";
         Statement st;
         ResultSet rs;
@@ -739,8 +781,10 @@ public class MainController extends AbstractController implements Initializable 
             st = connection.createStatement();
             rs = st.executeQuery(query);
             ItemModel itemModel;
+            int index=1;
             while(rs.next()) {
                 itemModel = new ItemModel(
+                        index,
                         rs.getInt("i.id"),
                         rs.getString("i.title"),
                         rs.getString("stock"),
@@ -750,6 +794,7 @@ public class MainController extends AbstractController implements Initializable 
                         rs.getString("c.title"),
                         rs.getString("initial")
                         );
+                index++;
                 vendorOrdersItemList.add(itemModel);
             }
         } catch (Exception e) {
@@ -760,17 +805,18 @@ public class MainController extends AbstractController implements Initializable 
     public ObservableList<CartsModel> getCartItemsList(int id){
         placeOrderBtn.setDisable(true);
         ObservableList<CartsModel> cartsModels = FXCollections.observableArrayList();
-        Connection connection = dbConnection.getConnection();
         String query = "SELECT * FROM order_items oi JOIN items i on oi.item_id=i.id JOIN categories c on c.id = i.cat_id where oi.order_id = '"+id+"'";
         Statement st;
         ResultSet rs;
-        double total = 0, haveVal=0;
+        float total = 0, haveVal=0;
         try {
             st = connection.createStatement();
             rs = st.executeQuery(query);
             CartsModel cartsModel;
+            int index=1;
             while(rs.next()) {
                 cartsModel = new CartsModel(
+                        index,
                         rs.getInt("oi.id"),
                         rs.getInt("i.id"),
                         rs.getString("i.title"),
@@ -779,6 +825,7 @@ public class MainController extends AbstractController implements Initializable 
                         rs.getInt("i.itemType"),
                         rs.getString("c.title")
                         );
+                index++;
                 cartsModels.add(cartsModel);
                 total+=cartsModel.getPayable();
                 haveVal=1;
@@ -796,27 +843,34 @@ public class MainController extends AbstractController implements Initializable 
 
     public void showCategories() {
         ObservableList<CategoryModel> list = getCategoriesList(false);
-        cat_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        cat_id.setCellValueFactory(new PropertyValueFactory<>("index"));
         cat_title.setCellValueFactory(new PropertyValueFactory<>("category"));
         categoriesTableView.setItems(list);
 
 
         ObservableList<CategoryModel> list1 = getCategoriesList(true);
-        shop_cat_id.setCellValueFactory(new PropertyValueFactory<>("id"));
         shop_cat_title.setCellValueFactory(new PropertyValueFactory<>("category"));
         shopCategoriesTableView.setItems(list1);
     }
 
     public void showVendors() {
         ObservableList<VendorModel> list = getVendorsList();
-        v_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        v_id.setCellValueFactory(new PropertyValueFactory<>("index"));
         v_title.setCellValueFactory(new PropertyValueFactory<>("title"));
         vendorsTableView.setItems(list);
+    }
+    public void showOrders() {
+        ObservableList<OrderModel> list = getOrdersList(0);
+        o_id.setCellValueFactory(new PropertyValueFactory<>("index"));
+        order_c_name.setCellValueFactory(new PropertyValueFactory<>("name"));
+        order_total_amt.setCellValueFactory(new PropertyValueFactory<>("total"));
+        order_paid_amt.setCellValueFactory(new PropertyValueFactory<>("paid"));
+        OrderTableView.setItems(list);
     }
 
     public void showVendorOrders(int id) {
         ObservableList<VendorOrderModel> list = getVendorOrdersList(id);
-        vo_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        vo_id.setCellValueFactory(new PropertyValueFactory<>("index"));
         vo_title.setCellValueFactory(new PropertyValueFactory<>("title"));
         vo_status.setCellValueFactory(new PropertyValueFactory<>("inStock"));
         vendorOrdersTableView.setItems(list);
@@ -824,7 +878,7 @@ public class MainController extends AbstractController implements Initializable 
 
     public void showCartItems() {
         ObservableList<CartsModel> list = getCartItemsList(GetOrCreateOrder());
-        order_item_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        order_item_id.setCellValueFactory(new PropertyValueFactory<>("index"));
         order_item_title.setCellValueFactory(new PropertyValueFactory<>("title"));
         order_item_price.setCellValueFactory(new PropertyValueFactory<>("mrp"));
         order_item_qty.setCellValueFactory(new PropertyValueFactory<>("stock"));
@@ -834,7 +888,7 @@ public class MainController extends AbstractController implements Initializable 
 
     public void showVendorOrderItems(int id, String stockStatus) {
         ObservableList<ItemModel> list = getVendorOrdersItemList(id);
-        item_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        item_id.setCellValueFactory(new PropertyValueFactory<>("index"));
         item_title.setCellValueFactory(new PropertyValueFactory<>("title"));
         item_cat.setCellValueFactory(new PropertyValueFactory<>("category"));
         itemType.setCellValueFactory(new PropertyValueFactory<>("itemType"));
@@ -888,6 +942,70 @@ public class MainController extends AbstractController implements Initializable 
             alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
             alert.show();
         }
+    }
+
+    //Manage Payments
+
+    @FXML
+    private TableView<CustomerModel> customersTableView;
+    @FXML
+    private TableColumn<CustomerModel, Integer> id;
+    @FXML
+    private TableColumn<CustomerModel, String> customer_name, customer_contact, customer_address, customer_due;
+    public Button clearCustomerSearchBtn;
+    public TextField searchCustomerField;
+
+    public void PaymentsInitialize(){
+        showOrders();
+        searchCustomerField.textProperty().addListener((event)->{
+            showCustomers(searchCustomerField.getText());
+        });
+        clearCustomerSearchBtn.setOnAction(event->{
+            searchCustomerField.setText("");
+        });
+        showCustomers("");
+    }
+    public void showCustomers(String search) {
+        ObservableList<CustomerModel> list = getCustomersList(search);
+        id.setCellValueFactory(new PropertyValueFactory<>("index"));
+        customer_name.setCellValueFactory(new PropertyValueFactory<>("name"));
+        customer_contact.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        customer_address.setCellValueFactory(new PropertyValueFactory<>("address"));
+        customer_due.setCellValueFactory(new PropertyValueFactory<>("due"));
+        customersTableView.setItems(list);
+    }
+    public ObservableList<CustomerModel> getCustomersList(String search){
+        ObservableList<CustomerModel> customerModels = FXCollections.observableArrayList();
+        String query;
+        if(search.equals("")){
+            query = "SELECT * FROM customers order by regularity_count desc";
+        }
+        else {
+            query = "SELECT * FROM customers where name like '"+search+"%' or contact like '"+search+"%' order by regularity_count desc ";
+        }
+        Statement st;
+        ResultSet rs;
+        CustomerModel customerModel;
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(query);
+            int index=1;
+            while(rs.next()) {
+                customerModel = new CustomerModel(
+                        index,
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("contact"),
+                        rs.getString("email"),
+                        rs.getString("address")
+                );
+                index++;
+                customerModels.add(customerModel);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return customerModels;
     }
 
 }

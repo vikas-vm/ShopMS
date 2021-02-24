@@ -1,7 +1,4 @@
 package sample.controllers;
-
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,6 +12,7 @@ import sample.models.*;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Optional;
@@ -42,11 +40,13 @@ public class ProceedToOrder extends AbstractController implements Initializable 
     private TableColumn<CustomerModel, String> customer_name, customer_contact, customer_address, customer_due;
     int orderId;
     int customer_id=0;
-    double total;
+    float total;
+    float dueBal=0;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         showCustomers("");
         totalAmt.setText(String.valueOf(total));
+        paidAmt.setText(String.valueOf(total));
         closeBtn.setOnAction((event)->{
             closeStage();
         });
@@ -104,25 +104,33 @@ public class ProceedToOrder extends AbstractController implements Initializable 
         customersTableView.setOnMouseClicked(mouseEvent -> {
             CustomerModel p = customersTableView.getSelectionModel().getSelectedItem();
             if(p!=null){
+                try {
+                    dueBal=p.getDue();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
                 customer_id=p.getId();
                 name.setText(p.getName());
                 contact.setText(p.getContact());
                 email.setText(p.getEmail());
                 address.setText(p.getAddress());
+                paidAmt.setText(String.valueOf(dueBal+total));
             }
         });
     }
     private void ResetForm(){
         customer_id=0;
+        dueBal=0;
         name.setText("");
         contact.setText("");
         email.setText("");
         address.setText("");
+        paidAmt.setText(String.valueOf(total));
     }
 
     public void showCustomers(String search) {
         ObservableList<CustomerModel> list = getCustomersList(search);
-        id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        id.setCellValueFactory(new PropertyValueFactory<>("index"));
         customer_name.setCellValueFactory(new PropertyValueFactory<>("name"));
         customer_contact.setCellValueFactory(new PropertyValueFactory<>("contact"));
         customer_address.setCellValueFactory(new PropertyValueFactory<>("address"));
@@ -136,22 +144,25 @@ public class ProceedToOrder extends AbstractController implements Initializable 
            query = "SELECT * FROM customers order by regularity_count desc";
         }
         else {
-            query = "SELECT * FROM customers where name like '%"+search+"%' or contact like '"+search+"%' order by regularity_count desc ";
+            query = "SELECT * FROM customers where name like '"+search+"%' or contact like '"+search+"%' order by regularity_count desc ";
         }
         Statement st;
         ResultSet rs;
         CustomerModel customerModel;
         try {
             st = connection.createStatement();
-            rs = st.executeQuery(query);lo
+            rs = st.executeQuery(query);
+            int index=1;
             while(rs.next()) {
                 customerModel = new CustomerModel(
+                        index,
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("contact"),
                         rs.getString("email"),
                         rs.getString("address")
                 );
+                index++;
                 customerModels.add(customerModel);
             }
         } catch (Exception e) {

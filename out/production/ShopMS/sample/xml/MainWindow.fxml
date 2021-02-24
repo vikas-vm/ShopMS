@@ -95,7 +95,6 @@
 
                                 <TableView fx:id="shopCategoriesTableView" GridPane.columnIndex="0" GridPane.rowIndex="1" prefWidth="348">
                                     <columns>
-                                        <TableColumn fx:id="shop_cat_id" text="ID" prefWidth="30"/>
                                         <TableColumn fx:id="shop_cat_title" text="Category" minWidth="100" prefWidth="218" maxWidth="320"/>
                                     </columns>
                                 </TableView>
@@ -167,484 +166,327 @@
                         </HBox>
                     </GridPane>
                 </Tab>
-                <Tab text="Stock">
+<!--                <Tab text="Manage existing Stock">-->
+<!--                    <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"-->
+<!--                                AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">-->
+<!--                        <left>-->
+<!--                            <ListView fx:id="ListView" layoutX="0" layoutY="30" prefWidth="250" prefHeight="300">-->
+<!--                                <HBox fx:id="listBox" alignment="CENTER_LEFT">-->
+<!--                                    <padding>-->
+<!--                                        <Insets top="5" bottom="5" left="5"/> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label fx:id="surveyName" text="Field A" styleClass="Name"/>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                                <HBox alignment="CENTER_LEFT">-->
+<!--                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>-->
+<!--                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">-->
+<!--                                        <Label text="Field A" styleClass="Name"></Label>-->
+<!--                                    </HBox>-->
+<!--                                </HBox>-->
+<!--                            </ListView>-->
+<!--                        </left>-->
+<!--                        <center>-->
+<!--                            <GridPane BorderPane.alignment="CENTER">-->
+<!--                                <columnConstraints>-->
+<!--                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>-->
+<!--                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>-->
+<!--                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>-->
+<!--                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>-->
+<!--                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>-->
+<!--                                </columnConstraints>-->
+<!--                                <rowConstraints>-->
+<!--                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>-->
+<!--                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>-->
+<!--                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>-->
+<!--                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>-->
+<!--                                </rowConstraints>-->
+<!--                                <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"-->
+<!--                                        text="Stock"/>-->
+<!--                            </GridPane>-->
+<!--                        </center>-->
+<!--                    </BorderPane>-->
+<!--                </Tab>-->
+                <Tab text="Manage Payments">
                     <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                                 AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                        <left>
-                            <ListView fx:id="ListView" layoutX="0" layoutY="30" prefWidth="250" prefHeight="300">
-                                <HBox fx:id="listBox" alignment="CENTER_LEFT">
-                                    <padding>
-                                        <Insets top="5" bottom="5" left="5"/> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label fx:id="surveyName" text="Field A" styleClass="Name"/>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                            </ListView>
-                        </left>
                         <center>
-                            <GridPane BorderPane.alignment="CENTER">
+                            <GridPane hgap="20" vgap="2">
+
                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="503.0"/>
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="100.0"/>
                                 </columnConstraints>
                                 <rowConstraints>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                    <RowConstraints  minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                                 </rowConstraints>
-                                <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                        text="Stock"/>
+
+                                <HBox GridPane.columnIndex="0" GridPane.rowIndex="0" minWidth="250">
+                                    <GridPane>
+                                        <columnConstraints>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="533.0"/>
+                                        </columnConstraints>
+                                        <rowConstraints>
+                                            <RowConstraints minHeight="30.0" vgrow="ALWAYS" maxHeight="40"/>
+                                            <RowConstraints minHeight="30.0" prefHeight="30.0" maxHeight="40" vgrow="ALWAYS"/>
+                                            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                        </rowConstraints>
+                                        <HBox GridPane.rowIndex="1" GridPane.columnIndex="0" alignment="CENTER">
+                                            <VBox>
+                                                <TextField promptText="search customer  here" fx:id="searchCustomerField"  prefHeight="40" prefWidth="470" minHeight="30"/>
+                                            </VBox>
+                                            <VBox>
+                                                <Button prefHeight="50" fx:id="clearCustomerSearchBtn" prefWidth="60" minHeight="30" text="X"/>
+                                            </VBox>
+                                        </HBox>
+                                        <HBox alignment="CENTER" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                                            <Label alignment="TOP_CENTER" scaleY="2" text="Existing Customer lists"/>
+                                        </HBox>
+                                        <TableView fx:id="customersTableView" GridPane.columnIndex="0" GridPane.rowIndex="2" prefWidth="532">
+                                            <columns>
+                                                <TableColumn fx:id="id" text="ID" prefWidth="30"/>
+                                                <TableColumn fx:id="customer_name" text="Name" minWidth="100" prefWidth="150" maxWidth="320"/>
+                                                <TableColumn fx:id="customer_contact" text="Contact" minWidth="100" prefWidth="100" maxWidth="320"/>
+                                                <TableColumn fx:id="customer_address" text="Address" minWidth="100" prefWidth="150" maxWidth="320"/>
+                                                <TableColumn fx:id="customer_due" text="Due" minWidth="60" prefWidth="60"/>
+                                            </columns>
+                                        </TableView>
+                                    </GridPane>
+                                </HBox>
+                                <HBox GridPane.columnIndex="1" GridPane.rowIndex="0" minWidth="250">
+                                    <GridPane>
+                                        <columnConstraints>
+                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="533.0"/>
+                                        </columnConstraints>
+                                        <rowConstraints>
+                                            <RowConstraints minHeight="30.0" vgrow="ALWAYS" maxHeight="40"/>
+                                            <RowConstraints minHeight="30.0" prefHeight="30.0" maxHeight="40" vgrow="ALWAYS"/>
+                                            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                        </rowConstraints>
+                                        <HBox GridPane.rowIndex="1" GridPane.columnIndex="0" alignment="CENTER">
+                                            <VBox>
+                                                <Button prefHeight="50" fx:id="" prefWidth="100" minHeight="30" text="New Payment"/>
+                                            </VBox>
+                                            <VBox>
+                                                <Button prefHeight="50" fx:id="" prefWidth="100" minHeight="30" text="Clear Selection"/>
+                                            </VBox>
+                                        </HBox>
+                                        <HBox alignment="CENTER" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                                            <Label alignment="TOP_CENTER" scaleY="2" text="Order lists"/>
+                                        </HBox>
+                                        <TableView fx:id="OrderTableView" GridPane.columnIndex="0" GridPane.rowIndex="2" prefWidth="532">
+                                            <columns>
+                                                <TableColumn fx:id="o_id" text="S.no." prefWidth="50"/>
+                                                <TableColumn fx:id="order_c_name" text="Customer Name" minWidth="100" prefWidth="150" maxWidth="320"/>
+                                                <TableColumn fx:id="order_total_amt" text="Total Amount" minWidth="100" prefWidth="150" maxWidth="320"/>
+                                                <TableColumn fx:id="order_paid_amt" text="Paid Amount" minWidth="100" prefWidth="60"/>
+                                            </columns>
+                                        </TableView>
+                                    </GridPane>
+                                </HBox>
                             </GridPane>
                         </center>
                     </BorderPane>
                 </Tab>
-                <Tab text="Bill">
-                    <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                        <left>
-                            <ListView fx:id="ListView" layoutX="0" layoutY="30" prefWidth="250" prefHeight="300">
-                                <HBox fx:id="listBox" alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label fx:id="surveyName" text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT">
-                                    <padding><Insets top="5" bottom="5" left="5"></Insets> </padding>
-                                    <HBox alignment="CENTER_LEFT" prefWidth="170" minWidth="88">
-                                        <Label text="Field A" styleClass="Name"></Label>
-                                    </HBox>
-                                </HBox>
-                            </ListView>
-                        </left>
-                        <center>
-                            <GridPane BorderPane.alignment="CENTER">
-                                <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                </columnConstraints>
-                                <rowConstraints>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                </rowConstraints>
-                                <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                        text="Bill"/>
-                            </GridPane>
-                        </center>
-                    </BorderPane>
-                </Tab>
-                <Tab text="Vendor">
+                <Tab text="Manage Vendors and new stocks">
                     <BorderPane minWidth="500.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                                 AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 

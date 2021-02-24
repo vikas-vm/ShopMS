@@ -52,15 +52,13 @@ public class UpdateItemPrice extends AbstractController implements Initializable
         });
     }
     public void setForm(){
-        String query = "SELECT * FROM order_items oi JOIN items i on i.id = oi.item_id JOIN categories c on c.id = i.cat_id JOIN vendor_orders vo on vo.id = i.vo_id" +
-                " where oi.item_id = '"+itemId+"'";
+        String query = "SELECT * FROM items i JOIN categories c on c.id = i.cat_id where i.id = '"+itemId+"'";
         Statement st;
         ResultSet rs;
 
         try {
             st = connection.createStatement();
             rs = st.executeQuery(query);
-            newPriceTextFieldProperty();
             if (rs.next()){
                 newMrp.setText(rs.getString("i.mrp"));
                 availStock = rs.getFloat("i.stock");
@@ -77,6 +75,7 @@ public class UpdateItemPrice extends AbstractController implements Initializable
                     stockLabel.setText("Available in stock:");
                     stock.setText(rs.getString("i.stock")+" unt");
                 }
+                newPriceTextFieldProperty();
 
             }
         } catch (Exception e) {

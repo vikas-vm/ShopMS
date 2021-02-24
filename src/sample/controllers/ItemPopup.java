@@ -76,6 +76,7 @@ public class ItemPopup extends AbstractController implements Initializable {
         try {
             st = connection.createStatement();
             rs = st.executeQuery(query);
+
             if (rs.next()){
                 System.out.println();
                 if(rs.getInt("vo.inStock")==0){
@@ -110,8 +111,9 @@ public class ItemPopup extends AbstractController implements Initializable {
                     updateItemBtn.setDisable(true);
                     deleteBtn.setDisable(true);
                 }
-
+                int index=1;
                 ItemModel itemModel = new ItemModel(
+                        index,
                         rs.getInt("i.id"),
                         rs.getString("i.title"),
                         rs.getString("stock"),

@@ -9,14 +9,17 @@ import java.sql.Statement;
 
 public class CustomerModel {
     DbConnection dbConnection = new DbConnection();
+    Connection connection = dbConnection.getConnection();
 
     private final int id;
+    private final int index;
     private final String name;
     private final String contact;
     private final String email;
     private final String address;
 
-    public CustomerModel(int Id, String Name, String Contact, String Email,  String Address){
+    public CustomerModel(int index, int Id, String Name, String Contact, String Email,  String Address){
+        this.index = index;
         this.id = Id;
         this.name=Name;
         this.contact=Contact;
@@ -24,6 +27,9 @@ public class CustomerModel {
         this.address=Address;
     }
 
+    public int getIndex() {
+        return index;
+    }
     public int getId() {
         return id;
     }
@@ -39,8 +45,7 @@ public class CustomerModel {
     public String getAddress() {
         return address;
     }
-    public String getDue() throws SQLException {
-        Connection connection = dbConnection.getConnection();
+    public float getDue() throws SQLException {
         float total_amt=0, paid_amt=0;
         String query = "Select sum(total_amt) as total_amt from shop_orders where cust_id='"+id+"'";
         Statement st;
@@ -56,7 +61,7 @@ public class CustomerModel {
         if(rs.next()){
             paid_amt = rs.getFloat("total_paid");
         }
-        return "₹ "+(total_amt-paid_amt);
+        return (total_amt-paid_amt);
     }
 
 }

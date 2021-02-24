@@ -162,9 +162,11 @@ public class ThemesList extends AbstractController implements Initializable {
         try {
             st = connection.createStatement();
             rs = st.executeQuery(query);
+            int index=1;
             while(rs.next()) {
-                categoryModel = new CategoryModel(rs.getInt("id"),rs.getString("title"));
+                categoryModel = new CategoryModel(index,rs.getInt("id"),rs.getString("title"));
                 categoryModels.add(categoryModel);
+                index++;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -191,8 +193,10 @@ public class ThemesList extends AbstractController implements Initializable {
             st = connection.createStatement();
             rs = st.executeQuery(query);
             CartsModel cartsModel;
+            int index=1;
             while(rs.next()) {
                 cartsModel = new CartsModel(
+                        index,
                         rs.getInt("oi.id"),
                         rs.getInt("i.id"),
                         rs.getString("i.title"),
@@ -202,6 +206,7 @@ public class ThemesList extends AbstractController implements Initializable {
                         rs.getString("c.title")
                 );
                 cartsModels.add(cartsModel);
+                index++;
             }
         } catch (Exception e) {
             e.printStackTrace();
