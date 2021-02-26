@@ -139,6 +139,11 @@ public class MainController extends AbstractController implements Initializable 
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        try {
+            logout();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         addVendorOrderBtn.setDisable(true);
         addOrderItemBtn.setDisable(true);
         moveToStockBtn.setDisable(true);
