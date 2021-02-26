@@ -37,7 +37,7 @@ public class MainController extends AbstractController implements Initializable 
     public Label totalAmt;
 
     @FXML
-    private TableView<CategoryModel> categoriesTableView, shopCategoriesTableView;
+    private TableView<CategoryModel> categoriesTableView, shopCategoriesTableView, StockCategoriesTableView;
     @FXML
     private TableColumn<CategoryModel, Integer> cat_id;
     @FXML
@@ -75,6 +75,8 @@ public class MainController extends AbstractController implements Initializable 
     private TableColumn<OrderModel, Integer> o_id;
     @FXML
     private TableColumn<OrderModel, String> order_c_name, order_total_amt, order_paid_amt;
+    @FXML
+    private TableColumn<CategoryModel, String> stock_cat_title;
     public GridPane shopItemsGrid;
     DbConnection dbConnection = new DbConnection();
     Connection connection = dbConnection.getConnection();
@@ -140,9 +142,10 @@ public class MainController extends AbstractController implements Initializable 
         addVendorOrderBtn.setDisable(true);
         addOrderItemBtn.setDisable(true);
         moveToStockBtn.setDisable(true);
-        PaymentsInitialize();
         showVendors();
         loadShop();
+        PaymentsInitialize();
+        StocksInitialize();
         reloadBtn.setOnAction(event->{
             loadShop();
         });
@@ -290,14 +293,14 @@ public class MainController extends AbstractController implements Initializable 
             while (rs.next()){
                 if(rs.getInt("itemType")==0){
                     itemType="/kg";
-                    stockRem = rs.getString("i.stock")+" kgs rem.";
+                    stockRem = rs.getString("stock")+" kgs rem.";
                 }else {
                     itemType="/unit";
-                    stockRem = Math.round(rs.getFloat("i.stock"))+" unts\n rem.";
+                    stockRem = Math.round(rs.getFloat("stock"))+" unts\n rem.";
                 }
-                addButton(rs.getInt("i.id"), rs.getString("i.title")+"\n("+
-                        rs.getString("c.title")+")"+"\n₹ "+
-                        rs.getString("i.mrp")+itemType+"\n\n"+stockRem);
+                addButton(rs.getInt("id"), rs.getString("title")+"\n("+
+                        rs.getString("title")+")"+"\n₹ "+
+                        rs.getString("mrp")+itemType+"\n\n"+stockRem);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -742,7 +745,7 @@ public class MainController extends AbstractController implements Initializable 
         ObservableList<OrderModel> orderModels = FXCollections.observableArrayList();
         String query;
         if(id>0){
-            query = "SELECT * FROM shop_orders so join customers c on c.id = so.cust_id join payments p on p.order_id=so.id where so.id = '"+id+"' order by so.id desc";
+            query = "SELECT * FROM shop_orders so join customers c on c.id = so.cust_id join payments p on p.order_id=so.id where c.id = '"+id+"' order by so.id desc";
         }
         else {
             query = "SELECT * FROM shop_orders so join customers c on c.id = so.cust_id join payments p on p.order_id=so.id order by so.id desc";
@@ -758,10 +761,10 @@ public class MainController extends AbstractController implements Initializable 
             while(rs.next()) {
                 orderModel = new OrderModel(
                         index,
-                        rs.getInt("so.id"),
-                        rs.getString("c.name"),
-                        rs.getFloat("so.total_amt"),
-                        rs.getFloat("p.amount")
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getFloat("total_amt"),
+                        rs.getFloat("amount")
                 );
                 index++;
                 orderModels.add(orderModel);
@@ -851,6 +854,10 @@ public class MainController extends AbstractController implements Initializable 
         ObservableList<CategoryModel> list1 = getCategoriesList(true);
         shop_cat_title.setCellValueFactory(new PropertyValueFactory<>("category"));
         shopCategoriesTableView.setItems(list1);
+
+        ObservableList<CategoryModel> list2 = getCategoriesList(true);
+        stock_cat_title.setCellValueFactory(new PropertyValueFactory<>("category"));
+        StockCategoriesTableView.setItems(list2);
     }
 
     public void showVendors() {
@@ -859,8 +866,8 @@ public class MainController extends AbstractController implements Initializable 
         v_title.setCellValueFactory(new PropertyValueFactory<>("title"));
         vendorsTableView.setItems(list);
     }
-    public void showOrders() {
-        ObservableList<OrderModel> list = getOrdersList(0);
+    public void showOrders(int id) {
+        ObservableList<OrderModel> list = getOrdersList(id);
         o_id.setCellValueFactory(new PropertyValueFactory<>("index"));
         order_c_name.setCellValueFactory(new PropertyValueFactory<>("name"));
         order_total_amt.setCellValueFactory(new PropertyValueFactory<>("total"));
@@ -949,21 +956,81 @@ public class MainController extends AbstractController implements Initializable 
     @FXML
     private TableView<CustomerModel> customersTableView;
     @FXML
+    private TableView<CartsModel> OrderItemsTableView;
+    @FXML
     private TableColumn<CustomerModel, Integer> id;
     @FXML
+    private TableColumn<CartsModel, Integer> oi_id;
+    @FXML
     private TableColumn<CustomerModel, String> customer_name, customer_contact, customer_address, customer_due;
+    @FXML
+    private TableColumn<CartsModel, String> oi_title, oi_qty, oi_price, oi_payable;
     public Button clearCustomerSearchBtn;
     public TextField searchCustomerField;
+    public Button clearOrderSelectionBtn, newPaymentBtn;
 
+    public HashMap<String, Object> NewPaymentRecord(){
+
+        HashMap<String, Object> resultMap = new HashMap<String, Object>();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("../xml/NewPaymentRecord.fxml"));
+        NewPaymentRecord popupController = new NewPaymentRecord();
+        loader.setController(popupController);
+//        popupController.itemId = itemId;
+//        popupController.orderId = orderId;
+        Parent layout;
+        try {
+            layout = loader.load();
+            Scene scene = new Scene(layout, 600, 350);
+            scene.getRoot().getStylesheets().add(dbConnection.getTheme());
+            Stage popupStage = new Stage();
+            popupController.setStage(popupStage);
+            if(this.main!=null) {
+                popupStage.initOwner(main.getPrimaryStage());
+            }
+            popupStage.initModality(Modality.WINDOW_MODAL);
+            popupStage.setTitle("New Payments Record | InventoryMS");
+            popupStage.resizableProperty().setValue(Boolean.FALSE);
+            popupStage.setScene(scene);
+            popupStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return popupController.getResult();
+    }
     public void PaymentsInitialize(){
-        showOrders();
+        showOrders(0);
+        newPaymentBtn.setDisable(true);
         searchCustomerField.textProperty().addListener((event)->{
             showCustomers(searchCustomerField.getText());
         });
         clearCustomerSearchBtn.setOnAction(event->{
             searchCustomerField.setText("");
         });
+        newPaymentBtn.setOnAction(event->{
+            NewPaymentRecord();
+        });
         showCustomers("");
+        clearOrderSelectionBtn.setOnAction(event->{
+            showOrders(0);
+            newPaymentBtn.setDisable(true);
+        });
+
+        customersTableView.setOnMouseClicked(mouseEvent -> {
+            CustomerModel p = customersTableView.getSelectionModel().getSelectedItem();
+            if(p!=null){
+                showOrders(p.getId());
+                OrderItemsTableView.setItems(null);
+                newPaymentBtn.setDisable(false);
+            }
+        });
+
+        OrderTableView.setOnMouseClicked(mouseEvent -> {
+            OrderModel p = OrderTableView.getSelectionModel().getSelectedItem();
+            if(p!=null){
+                showOrderItems(p.getId());
+            }
+        });
     }
     public void showCustomers(String search) {
         ObservableList<CustomerModel> list = getCustomersList(search);
@@ -973,6 +1040,53 @@ public class MainController extends AbstractController implements Initializable 
         customer_address.setCellValueFactory(new PropertyValueFactory<>("address"));
         customer_due.setCellValueFactory(new PropertyValueFactory<>("due"));
         customersTableView.setItems(list);
+    }
+    public void showOrderItems(int id) {
+        ObservableList<CartsModel> list = getOrderItemsList(id);
+        oi_id.setCellValueFactory(new PropertyValueFactory<>("index"));
+        oi_title.setCellValueFactory(new PropertyValueFactory<>("title"));
+        oi_qty.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        oi_payable.setCellValueFactory(new PropertyValueFactory<>("payable"));
+        oi_price.setCellValueFactory(new PropertyValueFactory<>("mrp"));
+        OrderItemsTableView.setItems(list);
+    }
+    public ObservableList<CartsModel> getOrderItemsList(int id){
+        placeOrderBtn.setDisable(true);
+        ObservableList<CartsModel> cartsModels = FXCollections.observableArrayList();
+        String query = "SELECT * FROM order_items oi JOIN items i on oi.item_id=i.id JOIN categories c on c.id = i.cat_id where oi.order_id = '"+id+"'";
+        Statement st;
+        ResultSet rs;
+        float total = 0, haveVal=0;
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(query);
+            CartsModel cartsModel;
+            int index=1;
+            while(rs.next()) {
+                cartsModel = new CartsModel(
+                        index,
+                        rs.getInt("oi.id"),
+                        rs.getInt("i.id"),
+                        rs.getString("i.title"),
+                        rs.getFloat("oi.qty"),
+                        rs.getFloat("oi.price"),
+                        rs.getInt("i.itemType"),
+                        rs.getString("c.title")
+                );
+                index++;
+                cartsModels.add(cartsModel);
+                total+=cartsModel.getPayable();
+                haveVal=1;
+            }
+            if(haveVal==1){
+                placeOrderBtn.setDisable(false);
+            }
+            totalAmount=total;
+            totalAmt.setText("₹ "+ total);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cartsModels;
     }
     public ObservableList<CustomerModel> getCustomersList(String search){
         ObservableList<CustomerModel> customerModels = FXCollections.observableArrayList();
@@ -1006,6 +1120,144 @@ public class MainController extends AbstractController implements Initializable 
             e.printStackTrace();
         }
         return customerModels;
+    }
+
+    //kamana/
+    public GridPane stockItemsGrid;
+    public Button inStockBtn, outOfStockBtn, StockClearSearchBtn;
+    public TextField StockSearchField;
+
+    private void StocksInitialize(){
+        loadStock();
+        inStockBtn.setOnAction(event->{
+            loadStock();
+        });
+        outOfStockBtn.setOnAction(event->{
+            loadoutStock();
+        });
+        StockClearSearchBtn.setOnAction((event)->{
+            StockSearchField.setText("");
+        });
+        StockSearchField.textProperty().addListener((event)->{
+            setItemsToGrid2(0,StockSearchField.getText());
+        });
+        StockCategoriesTableView.setOnMouseClicked(mouseEvent -> {
+            CategoryModel p = StockCategoriesTableView.getSelectionModel().getSelectedItem();
+            if(p != null) setItemsToGrid2(p.getId(), "");
+
+        });
+    }
+    private void addButtonStock(int id, String btnText) {
+        final Button temp = new Button(btnText);
+        temp.setId("" + id);
+        temp.getStyleClass().add("item-special-button");
+        temp.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                showLoginPopup();
+                showUpdatePricePopupWindow(Integer.parseInt(temp.getId()));
+                loadStock();
+            }
+        });
+        stockItemsGrid.add(temp, x, y);
+        if(x==7){
+            x=0;
+            y++;
+        }
+        else {
+            x++;
+        }
+
+    }
+    private void loadStock(){
+        setItemsToGrid2(0, "");
+        showCategories();
+    }
+    private void loadoutStock(){
+        setItemsToGridout(0, "");
+        showCategories();
+    }
+    public void setItemsToGrid2(int id, String search){
+        x=0;
+        y=0;
+        stockItemsGrid.getChildren().clear();
+        Connection connection = dbConnection.getConnection();
+        String query;
+        if(search.equals("")){
+            if(id>0){
+                query = "SELECT * FROM items i JOIN categories c on c.id = i.cat_id JOIN vendor_orders vo on (i.vo_id=vo.id and vo.inStock='1' and i.stock>0) where i.cat_id = '"+id+"'";
+            }
+            else {
+                query = "SELECT * FROM items i JOIN categories c on c.id = i.cat_id JOIN vendor_orders vo on (i.vo_id=vo.id and vo.inStock='1' and i.stock>0)";
+            }
+        }
+        else {
+            query="SELECT * FROM items i JOIN categories c on c.id = i.cat_id JOIN vendor_orders vo on (i.vo_id=vo.id and vo.inStock='1' and i.stock>0) where" +
+                    " i.title LIKE '%"+search+"%' or c.title LIKE '%"+search+"%' ";
+        }
+        Statement st;
+        ResultSet rs;
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(query);
+            String itemType;
+            String stockRem;
+            while (rs.next()){
+                if(rs.getInt("itemType")==0){
+                    itemType="/kg";
+                    stockRem = rs.getString("i.stock")+" kgs rem.";
+                }else {
+                    itemType="/unit";
+                    stockRem = Math.round(rs.getFloat("i.stock"))+" unts\n rem.";
+                }
+                addButtonStock(rs.getInt("i.id"), rs.getString("i.title")+"\n("+
+                        rs.getString("c.title")+")"+"\n₹ "+
+                        rs.getString("i.mrp")+itemType+"\n\n"+stockRem);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+    public void setItemsToGridout(int id, String search){
+        x=0;
+        y=0;
+        stockItemsGrid.getChildren().clear();
+        Connection connection = dbConnection.getConnection();
+        String query;
+        if(search.equals("")){
+            if(id>0){
+                query = "SELECT * FROM items i JOIN categories c on c.id = i.cat_id JOIN vendor_orders vo on (i.vo_id=vo.id  and i.stock=0) where i.cat_id = '"+id+"'";
+            }
+            else {
+                query = "SELECT * FROM items i JOIN categories c on c.id = i.cat_id JOIN vendor_orders vo on (i.vo_id=vo.id  and i.stock=0)";
+            }
+        }
+        else {
+            query="SELECT * FROM items i JOIN categories c on c.id = i.cat_id JOIN vendor_orders vo on (i.vo_id=vo.id and i.stock=0) where" +
+                    " i.title LIKE '%"+search+"%' or c.title LIKE '%"+search+"%' ";
+        }
+        Statement st;
+        ResultSet rs;
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(query);
+            String itemType;
+            String stockRem;
+            while (rs.next()){
+                if(rs.getInt("itemType")==0){
+                    itemType="/kg";
+                    stockRem = rs.getString("i.stock")+" kgs rem.";
+                }else {
+                    itemType="/unit";
+                    stockRem = Math.round(rs.getFloat("i.stock"))+" unts\n rem.";
+                }
+                addButtonStock(rs.getInt("i.id"), rs.getString("i.title")+"\n("+
+                        rs.getString("c.title")+")"+"\n₹ "+
+                        rs.getString("i.mrp")+itemType+"\n\n"+stockRem);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
 }

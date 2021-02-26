@@ -235,7 +235,7 @@ public class ProceedToOrder extends AbstractController implements Initializable 
         }
     }
     public void PlaceOrder(){
-        String query = "UPDATE order_items oi JOIN items i on oi.item_id=i.id set i.stock=i.stock-oi.qty where oi.order_id='"+orderId+"'";
+        String query = "UPDATE order_items oi JOIN items i on oi.item_id=i.id set oi.price=i.mrp, i.stock=i.stock-oi.qty where oi.order_id='"+orderId+"'";
         dbConnection.executeQuery(query);
         query = "UPDATE shop_orders so  set so.status='1', so.cust_id='"+customer_id+"', total_amt='"+totalAmt.getText()+"' where id='"+orderId+"'";
         dbConnection.executeQuery(query);

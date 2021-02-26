@@ -56,20 +56,20 @@ public class AddToCartPopup extends AbstractController implements Initializable 
             st = connection.createStatement();
             rs = st.executeQuery(query);
             if (rs.next()){
-                availStock = rs.getFloat("i.stock");
-                title.setText(rs.getString("i.title")+" ("+rs.getString("c.title")+")");
-                if(rs.getInt("i.itemType")==0){
-                    mrp.setText("₹ "+rs.getString("i.mrp")+"/kg");
+                availStock = rs.getFloat("stock");
+                title.setText(rs.getString("title")+" ("+rs.getString("title")+")");
+                if(rs.getInt("itemType")==0){
+                    mrp.setText("₹ "+rs.getString("mrp")+"/kg");
                     qtyLabel.setText("Quantity (in kg):");
                     stockLabel.setText("Available Quantity:");
-                    stock.setText(rs.getString("i.stock")+" kg");
+                    stock.setText(rs.getString("stock")+" kg");
                     qtyTextFieldProperty(false);
                 }
                 else {
-                    mrp.setText("₹ "+rs.getString("i.mrp")+"/unt");
+                    mrp.setText("₹ "+rs.getString("mrp")+"/unt");
                     qtyLabel.setText("Unts:");
                     stockLabel.setText("Available in stock:");
-                    stock.setText(rs.getString("i.stock")+" unt");
+                    stock.setText(rs.getString("stock")+" unt");
                     qtyTextFieldProperty(true);
                 }
 
