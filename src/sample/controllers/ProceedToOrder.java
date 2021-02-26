@@ -171,7 +171,7 @@ public class ProceedToOrder extends AbstractController implements Initializable 
         return customerModels;
     }
     public void AddCustomer(){
-        if(!name.getText().equals("")  && 0<Float.parseFloat(paidAmt.getText()) && 0<Float.parseFloat(totalAmt.getText())){
+        if(!name.getText().equals("")  && !paidAmt.getText().equals("") && !totalAmt.getText().equals("")){
             String query;
             if(customer_id==0){
                 query = "Insert into customers(name, contact, email, address, regularity_count)" +
@@ -228,8 +228,8 @@ public class ProceedToOrder extends AbstractController implements Initializable 
         }else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning | InventoryMS");
-            alert.setHeaderText("Re-enter new price");
-            alert.setContentText("New Price fields must not have 0 or null value");
+            alert.setHeaderText("Re-enter name, paid amount and total amount ");
+            alert.setContentText("Name, paid amount and total amount fields must not have null value");
             alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
             alert.show();
         }

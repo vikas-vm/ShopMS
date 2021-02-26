@@ -30,53 +30,117 @@ public class NewPaymentRecord extends AbstractController implements Initializabl
     public HashMap<String, Object> getResult() {
         return this.result;
     }
-//    public Button resetFormBtn, closeBtn, clearSearchBtn, placeOrderBtn, editTotalBtn;
-//    public TextField searchField, totalAmt, paidAmt, name, contact, email;
-//    public TextArea address;
-    int customer_id=0;
+    public TextField amount, name, contact,email;
+    public TextArea address;
+    public Button addPaymentBtn, closeBtn;
+    int customer_id;
+    float total_due;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-//        showCustomers("");
-//        totalAmt.setText(String.valueOf(total));
-//        paidAmt.setText(String.valueOf(total));
-//        closeBtn.setOnAction((event)->{
-//            closeStage();
-//        });
-//        contact.textProperty().addListener((observable, oldValue, newValue) -> {
-//            if (!newValue.matches("\\d{0,10}?")) {
-//                contact.setText(oldValue);
-//            }
-//        });
-//        paidAmt.textProperty().addListener((observable, oldValue, newValue) -> {
-//            if (!newValue.matches("\\d{0,10}([\\.]\\d{0,2})?")) {
-//                paidAmt.setText(oldValue);
-//            }
-//        });
-//        placeOrderBtn.setOnAction((event)->{
-//            AddCustomer();
-//        });
-//
-//
+        setForm();
+        closeBtn.setOnAction((event)->{
+            closeStage();
+        });
+        contact.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d{0,10}?")) {
+                contact.setText(oldValue);
+            }
+        });
+        addPaymentBtn.setOnAction((event)->{
+            UpdateCustomer();
+        });
+    }
+    public void setForm(){
+        String query = "SELECT * FROM customers where id = '"+customer_id+"'";
+        Statement st;
+        ResultSet rs;
+
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(query);
+            if (rs.next()){
+                name.setText(rs.getString("name"));
+                contact.setText(rs.getString("contact"));
+                email.setText(rs.getString("email"));
+                address.setText(rs.getString("address"));
+                amount.setText(""+total_due);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void UpdateCustomer(){
+        if(!name.getText().equals("")  && !amount.getText().equals("")){
+            String query;
+            query = "Update customers set name='"+name.getText()+"', contact='"+contact.getText()+"'," +
+                    "email='"+email.getText()+"', address='"+address.getText()+"', regularity_count=regularity_count+1 where id='"+customer_id+"'";
+            try {
+                int return_result = dbConnection.executeQuery(query);
+                if (return_result>0){
+                    PlaceOrder();
+                }
+                else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Internal Error");
+                    alert.setHeaderText("Internal Error");
+                    alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+                    alert.show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Internal Error");
+                alert.setHeaderText("Internal Error");
+                alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+                alert.show();
+            }
+
+        }else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning | InventoryMS");
+            alert.setHeaderText("Re-enter Amount");
+            alert.setContentText("Amount fields must not have null value");
+            alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+            alert.show();
+        }
     }
 
 //
-//    public void PlaceOrder(){
-//        String query = "UPDATE order_items oi JOIN items i on oi.item_id=i.id set oi.price=i.mrp, i.stock=i.stock-oi.qty where oi.order_id='"+orderId+"'";
-//        dbConnection.executeQuery(query);
-//        query = "UPDATE shop_orders so  set so.status='1', so.cust_id='"+customer_id+"', total_amt='0' where id='"+orderId+"'";
-//        dbConnection.executeQuery(query);
-//        query = "Insert into payments(order_id, amount) values('"+orderId+"','"+paidAmt.getText()+"')";
-//        dbConnection.executeQuery(query);
-//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//        alert.setTitle("Information | InventoryMS");
-//        alert.setHeaderText("Order Completed");
-//        alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
-//        alert.showAndWait().ifPresent(rs -> {
-//            if (rs == ButtonType.OK) {
-//                closeStage();
-//            }
-//        });
-//    }
+    public void PlaceOrder() throws SQLException {
+        String query;
+        ResultSet rs;
+        Statement st;
+        int orderId;
+
+        st = connection.createStatement();
+        query = "insert into shop_orders(status, cust_id, total_amt) values('1','"+customer_id+"','0')";
+        int return_result = dbConnection.executeQuery(query);
+        if(return_result>0) {
+            query = "SELECT * FROM shop_orders where status='1' order by id desc ";
+            rs = st.executeQuery(query);
+            if(rs.next()){
+                orderId = rs.getInt("id");
+                query = "Insert into payments(order_id, amount) values('"+orderId+"','"+amount.getText()+"')";
+                dbConnection.executeQuery(query);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information | InventoryMS");
+                alert.setHeaderText("Payment record added successfully");
+                alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+                alert.showAndWait().ifPresent(rs1 -> {
+                    if (rs1 == ButtonType.OK) {
+                        closeStage();
+                    }
+                });
+            }
+            else{
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Internal Error");
+                alert.setHeaderText("Internal Error");
+                alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
+                alert.show();
+            }
+        }
+    }
     private void closeStage() {
         if(stage!=null) {
             stage.close();

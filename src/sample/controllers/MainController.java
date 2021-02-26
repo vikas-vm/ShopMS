@@ -157,6 +157,7 @@ public class MainController extends AbstractController implements Initializable 
         placeOrderBtn.setOnAction((event)->{
             showProceedToOrderPopup();
             loadShop();
+            loadPayments();
         });
         exitMenu.setOnAction(event->{
             exit();
@@ -214,7 +215,14 @@ public class MainController extends AbstractController implements Initializable 
         ordersItemTableView.setOnMouseClicked(mouseEvent -> {
             CartsModel p = ordersItemTableView.getSelectionModel().getSelectedItem();
             if (p!=null) {
-                showUpdateCartPopup(p.getItem_id(), GetOrCreateOrder());
+                HashMap<String, Object> result = showUpdateCartPopup(p.getItem_id(), GetOrCreateOrder());
+
+                if(result.get("updateState")!=null){
+                    showLoginPopup();
+                    showUpdatePricePopupWindow(p.getItem_id());
+                    loadShop();
+                    AddToCart(p.getItem_id());
+                }
                 showCartItems();
             }
         });
@@ -656,6 +664,7 @@ public class MainController extends AbstractController implements Initializable 
             if(this.main!=null) {
                 popupStage.initOwner(main.getPrimaryStage());
             }
+
             popupStage.initModality(Modality.WINDOW_MODAL);
             popupStage.setTitle("Update Quantity | InventoryMS");
             popupStage.resizableProperty().setValue(Boolean.FALSE);
@@ -974,15 +983,14 @@ public class MainController extends AbstractController implements Initializable 
     public TextField searchCustomerField;
     public Button clearOrderSelectionBtn, newPaymentBtn;
 
-    public HashMap<String, Object> NewPaymentRecord(){
-
+    public HashMap<String, Object> NewPaymentRecord(int id, float due){
         HashMap<String, Object> resultMap = new HashMap<String, Object>();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("../xml/NewPaymentRecord.fxml"));
         NewPaymentRecord popupController = new NewPaymentRecord();
         loader.setController(popupController);
-//        popupController.itemId = itemId;
-//        popupController.orderId = orderId;
+        popupController.customer_id = id;
+        popupController.total_due = due;
         Parent layout;
         try {
             layout = loader.load();
@@ -1004,7 +1012,7 @@ public class MainController extends AbstractController implements Initializable 
         return popupController.getResult();
     }
     public void PaymentsInitialize(){
-        showOrders(0);
+        loadPayments();
         newPaymentBtn.setDisable(true);
         searchCustomerField.textProperty().addListener((event)->{
             showCustomers(searchCustomerField.getText());
@@ -1013,12 +1021,24 @@ public class MainController extends AbstractController implements Initializable 
             searchCustomerField.setText("");
         });
         newPaymentBtn.setOnAction(event->{
-            NewPaymentRecord();
+            showLoginPopup();
+            CustomerModel p = customersTableView.getSelectionModel().getSelectedItem();
+            if(p!=null){
+                try {
+                    NewPaymentRecord(p.getId(), p.getDue());
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                showCustomers("");
+                showOrders(p.getId());
+                newPaymentBtn.setDisable(true);
+                OrderItemsTableView.setItems(null);
+            }
         });
-        showCustomers("");
         clearOrderSelectionBtn.setOnAction(event->{
             showOrders(0);
             newPaymentBtn.setDisable(true);
+            OrderItemsTableView.setItems(null);
         });
 
         customersTableView.setOnMouseClicked(mouseEvent -> {
@@ -1029,7 +1049,6 @@ public class MainController extends AbstractController implements Initializable 
                 newPaymentBtn.setDisable(false);
             }
         });
-
         OrderTableView.setOnMouseClicked(mouseEvent -> {
             OrderModel p = OrderTableView.getSelectionModel().getSelectedItem();
             if(p!=null){
@@ -1045,6 +1064,10 @@ public class MainController extends AbstractController implements Initializable 
         customer_address.setCellValueFactory(new PropertyValueFactory<>("address"));
         customer_due.setCellValueFactory(new PropertyValueFactory<>("due"));
         customersTableView.setItems(list);
+    }
+    private void loadPayments(){
+        showOrders(0);
+        showCustomers("");
     }
     public void showOrderItems(int id) {
         ObservableList<CartsModel> list = getOrderItemsList(id);
@@ -1138,7 +1161,7 @@ public class MainController extends AbstractController implements Initializable 
             loadStock();
         });
         outOfStockBtn.setOnAction(event->{
-            loadoutStock();
+            loadOutStock();
         });
         StockClearSearchBtn.setOnAction((event)->{
             StockSearchField.setText("");
@@ -1178,7 +1201,7 @@ public class MainController extends AbstractController implements Initializable 
         setItemsToGrid2(0, "");
         showCategories();
     }
-    private void loadoutStock(){
+    private void loadOutStock(){
         setItemsToGridout(0, "");
         showCategories();
     }

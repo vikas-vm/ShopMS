@@ -13,7 +13,7 @@
                     </HBox>
 
                     <Label text="Amount :" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-                    <TextField fx:id="paidAmt"  GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                    <TextField fx:id="amount"  GridPane.columnIndex="1" GridPane.rowIndex="6"/>
                     <Button text="Add Payments" fx:id="addPaymentBtn" GridPane.columnIndex="1" prefWidth="400" GridPane.rowIndex="8"/>
 
                     <Label text="Name :" GridPane.columnIndex="0" GridPane.rowIndex="2"/>

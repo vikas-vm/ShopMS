@@ -104,7 +104,7 @@
                                     <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS"/>
                                 </rowConstraints>
                                 <HBox GridPane.columnIndex="0" GridPane.rowIndex="0" prefHeight="40">
-                                    <Button prefWidth="100" prefHeight="30" fx:id="reloadBtn" alignment="BOTTOM_RIGHT" text="reload"/>
+                                    <Button prefWidth="100" prefHeight="30" fx:id="reloadBtn" alignment="CENTER_RIGHT" text="Reload"/>
                                 </HBox>
                                 <ListView fx:id="gridListView" GridPane.columnIndex="0" GridPane.rowIndex="1" prefWidth="1200">
                                     <GridPane fx:id="shopItemsGrid" BorderPane.alignment="CENTER" vgap="10" hgap="10">

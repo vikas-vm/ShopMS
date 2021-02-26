@@ -28,12 +28,13 @@
         </GridPane>
     </center>
     <bottom>
-        <HBox alignment="BOTTOM_RIGHT">
+        <HBox alignment="CENTER">
             <VBox alignment="BOTTOM_LEFT">
-                <Button fx:id="updatePriceBtn" alignment="BOTTOM_LEFT" prefHeight="30" text="update price"/>
+                <Button fx:id="updatePriceBtn" prefHeight="30" text="update this item"/>
             </VBox>
+            <Label prefWidth="320"/>
             <VBox alignment="BOTTOM_RIGHT">
-                <Button fx:id="closeBtn" alignment="BOTTOM_RIGHT" prefHeight="30" text="close"/>
+                <Button fx:id="closeBtn" prefHeight="30" text="close"/>
             </VBox>
         </HBox>
     </bottom>

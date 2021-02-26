@@ -57,8 +57,8 @@ public class AddCategoryPopup extends AbstractController implements Initializabl
                     int return_result = dbConnection.executeQuery(query1);
                     if (return_result>0){
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Item Added Successfully");
-                        alert.setHeaderText("Item Added Successfully");
+                        alert.setTitle("Info");
+                        alert.setHeaderText("Category Added Successfully");
                         alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
                         alert.showAndWait().ifPresent(rs -> {
                             if (rs == ButtonType.OK) {
@@ -68,7 +68,7 @@ public class AddCategoryPopup extends AbstractController implements Initializabl
                     }
                     else {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("Internal Error");
+                        alert.setTitle("Alert");
                         alert.setHeaderText("Internal Error");
                         alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
                         alert.show();
@@ -76,7 +76,7 @@ public class AddCategoryPopup extends AbstractController implements Initializabl
                 }
                 else {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Category Already exists");
+                    alert.setTitle("Info");
                     alert.setHeaderText("Category Already exists");
                     alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
                     alert.show();
@@ -84,14 +84,14 @@ public class AddCategoryPopup extends AbstractController implements Initializabl
             } catch (Exception e) {
                 e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Internal Error");
+                alert.setTitle("Warning");
                 alert.setHeaderText("Internal Error");
                 alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
                 alert.show();
             }
         }else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("item failed to save");
+            alert.setTitle("Category failed to save");
             alert.setHeaderText("Please fills all mandatory fields");
             alert.setContentText("Recheck again category fields");
             alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());

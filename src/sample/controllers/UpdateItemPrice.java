@@ -24,8 +24,8 @@ public class UpdateItemPrice extends AbstractController implements Initializable
     public float availStock;
 
     public Button updateCartItemBtn, closeBtn, updatePriceBtn;
-    public TextField newMrp;
-    public Label title, mrp,stockLabel,stock,newMrpLabel;
+    public TextField newMrp,stock;
+    public Label title, mrp,stockLabel,newMrpLabel;
     private final HashMap<String, Object> result = new HashMap<String, Object>();
     private Stage stage = null;
 
@@ -67,13 +67,15 @@ public class UpdateItemPrice extends AbstractController implements Initializable
                     mrp.setText("₹ "+rs.getString("i.mrp")+"/kg");
                     newMrpLabel.setText("New Price (per kg):");
                     stockLabel.setText("Available Quantity:");
-                    stock.setText(rs.getString("i.stock")+" kg");
+                    stock.setText(rs.getString("i.stock"));
+                    stockTextFieldProperty(false);
                 }
                 else {
                     mrp.setText("₹ "+rs.getString("i.mrp")+"/unt");
                     newMrpLabel.setText("New Price (per unt):");
                     stockLabel.setText("Available in stock:");
-                    stock.setText(rs.getString("i.stock")+" unt");
+                    stock.setText(String.valueOf(Math.round(rs.getFloat("stock"))));
+                    stockTextFieldProperty(true);
                 }
                 newPriceTextFieldProperty();
 
@@ -91,16 +93,30 @@ public class UpdateItemPrice extends AbstractController implements Initializable
 
         });
     }
+    public void stockTextFieldProperty(boolean toInt){
+        stock.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!toInt){
+                if (!newValue.matches("\\d{0,10}([\\.]\\d{0,3})?")) {
+                    stock.setText(oldValue);
+                }
+            }else {
+                if (!newValue.matches("\\d*")) {
+                    stock.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+
+        });
+    }
     public void UpdatePrice(){
 
         if(!newMrp.getText().equals("")  && 0<Float.parseFloat(newMrp.getText())){
-            String query = "update items set mrp='"+newMrp.getText()+"' where id='"+itemId+"'";
+            String query = "update items set mrp='"+newMrp.getText()+"', stock='"+stock.getText()+"' where id='"+itemId+"'";
             try {
                 int return_result = dbConnection.executeQuery(query);
                 if (return_result>0){
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information | InventoryMS");
-                    alert.setHeaderText("Item price updated Successfully");
+                    alert.setHeaderText("Item updated Successfully");
                     alert.getDialogPane().getStylesheets().add(getClass().getResource(dbConnection.getTheme()).toExternalForm());
                     alert.showAndWait().ifPresent(rs -> {
                         if (rs == ButtonType.OK) {
