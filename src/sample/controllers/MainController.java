@@ -1150,7 +1150,7 @@ public class MainController extends AbstractController implements Initializable 
         return customerModels;
     }
 
-    //kamana/
+    //Manage Stocks/
     public GridPane stockItemsGrid;
     public Button inStockBtn, outOfStockBtn, StockClearSearchBtn;
     public TextField StockSearchField;
